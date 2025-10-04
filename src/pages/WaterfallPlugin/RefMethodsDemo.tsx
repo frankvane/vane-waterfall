@@ -55,15 +55,14 @@ export default function RefMethodsDemo() {
     }
   };
 
-  // 获取可见项
-  const handleGetVisibleItems = () => {
-    const visible = waterfallRef.current?.getVisibleItems();
-    if (visible) {
-      const indices = Array.from(visible).sort((a, b) => a - b);
+  // 获取视口信息
+  const handleGetViewportInfo = () => {
+    const viewport = waterfallRef.current?.getViewportInfo();
+    if (viewport) {
       setVisibleInfo(
-        `可见项: ${indices.length} 个 (索引: ${indices
-          .slice(0, 10)
-          .join(", ")}${indices.length > 10 ? "..." : ""})`
+        `视口信息: 滚动位置 ${viewport.scrollTop.toFixed(0)}px, ` +
+          `视口高度 ${viewport.clientHeight}px, ` +
+          `总高度 ${viewport.scrollHeight}px`
       );
     }
   };
@@ -84,8 +83,11 @@ export default function RefMethodsDemo() {
           `Y: ${position.y.toFixed(2)}px\n` +
           `宽: ${position.width.toFixed(2)}px\n` +
           `高: ${position.height.toFixed(2)}px\n` +
-          `列: ${position.column}`
+          `列: ${position.column}\n` +
+          `行: ${position.row}`
       );
+    } else {
+      alert(`Item ${targetIndex} 还未布局`);
     }
   };
 
@@ -181,7 +183,7 @@ export default function RefMethodsDemo() {
             获取布局信息
           </button>
           <button
-            onClick={handleGetVisibleItems}
+            onClick={handleGetViewportInfo}
             style={{
               padding: "8px 16px",
               background: "#17a2b8",
@@ -191,7 +193,7 @@ export default function RefMethodsDemo() {
               cursor: "pointer",
             }}
           >
-            获取可见项
+            获取视口信息
           </button>
           <button
             onClick={handleGetItemPosition}
@@ -261,6 +263,7 @@ export default function RefMethodsDemo() {
           items={items}
           columns={3}
           gap={16}
+          debug={true}
           renderItem={(item: WaterfallItem) => (
             <div
               style={{

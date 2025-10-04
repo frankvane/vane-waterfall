@@ -100,21 +100,6 @@ export interface WaterfallCoreProps<T = any> {
 
   // ===== 性能配置 =====
   /**
-   * 是否启用虚拟滚动（由插件控制）
-   */
-  virtual?: boolean;
-
-  /**
-   * 预估项高度（用于虚拟滚动）
-   */
-  estimateItemHeight?: number;
-
-  /**
-   * 预渲染项数（虚拟滚动时上下额外渲染的项数）
-   */
-  overscan?: number;
-
-  /**
    * 是否使用 transform 定位（性能更好）
    */
   useTransform?: boolean;
@@ -215,11 +200,6 @@ export interface WaterfallCoreRef {
   getViewportInfo: () => ViewportInfo;
 
   /**
-   * 获取可见项索引
-   */
-  getVisibleItems: () => Set<number>;
-
-  /**
    * 强制更新
    */
   forceUpdate: () => void;
@@ -272,9 +252,6 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       containerClassName,
       itemStyle,
       itemClassName,
-      virtual = false,
-      estimateItemHeight = 300,
-      overscan = 2,
       useTransform = true,
       throttleDelay = 16,
       debounceDelay = 150,
@@ -321,6 +298,13 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       Map<number, ItemPosition>
     >(new Map());
 
+    // 标记是否正在进行布局计算，防止重复触发
+    const isCalculatingLayoutRef = useRef(false);
+    // 标记是否已经完成首次布局
+    const hasInitialLayoutRef = useRef(false);
+    // 标记是否已经请求了布局计算（在 requestAnimationFrame 中）
+    const hasRequestedLayoutRef = useRef(false);
+
     const [viewportInfo, setViewportInfo] = useState<ViewportInfo>({
       scrollTop: 0,
       scrollLeft: 0,
@@ -332,7 +316,6 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       direction: null,
     });
 
-    const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
     const [, forceUpdateState] = useState({});
 
     // ===== 计算内边距 =====
@@ -358,13 +341,22 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       const itemRefs = itemRefsMap.current;
       if (!container || items.length === 0) return;
 
+      // 防止重复计算
+      if (isCalculatingLayoutRef.current) return;
+
+      isCalculatingLayoutRef.current = true;
+      hasRequestedLayoutRef.current = false;
+
       // 触发 onBeforeLayout 钩子
       if (onBeforeLayout) {
         const shouldContinue = await onBeforeLayout();
-        if (shouldContinue === false) return;
+        if (shouldContinue === false) {
+          isCalculatingLayoutRef.current = false;
+          return;
+        }
       }
 
-      if (debug) console.time("[WaterfallCore] Layout calculation");
+      if (debug) console.time("[WaterfallCore] Layout");
 
       const containerWidth = container.clientWidth;
       const contentWidth =
@@ -375,24 +367,17 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       const columnHeights = Array(columns).fill(paddingValues.top);
       const newPositions = new Map<number, ItemPosition>();
 
-      // 触发 onLayout 钩子
       if (onLayout) onLayout();
 
       // 计算每个项的位置
       for (let i = 0; i < items.length; i++) {
         const itemElement = itemRefs.get(i);
-        let itemHeight = estimateItemHeight;
+        if (!itemElement) continue;
 
-        // 尝试获取实际高度
-        if (itemElement) {
-          itemHeight = itemElement.offsetHeight || estimateItemHeight;
-        }
+        const itemHeight = itemElement.offsetHeight;
+        if (itemHeight === 0) continue;
 
-        // 找到最短的列
-        const shortestColumnIndex = columnHeights.indexOf(
-          Math.min(...columnHeights)
-        );
-        const column = shortestColumnIndex;
+        const column = columnHeights.indexOf(Math.min(...columnHeights));
         const x = paddingValues.left + column * (columnWidth + columnGapValue);
         const y = columnHeights[column];
 
@@ -405,7 +390,6 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
           row: Math.floor(i / columns),
         });
 
-        // 更新列高度
         columnHeights[column] += itemHeight + rowGapValue;
       }
 
@@ -422,26 +406,19 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       });
 
       setItemPositions(newPositions);
+      hasInitialLayoutRef.current = true;
 
-      // 触发 onLayoutComplete 钩子
       if (onLayoutComplete) onLayoutComplete();
+      if (debug) console.timeEnd("[WaterfallCore] Layout");
 
-      if (debug) {
-        console.timeEnd("[WaterfallCore] Layout calculation");
-        console.log("[WaterfallCore] Layout info:", {
-          columns,
-          columnWidth,
-          totalHeight,
-          itemCount: items.length,
-        });
-      }
+      isCalculatingLayoutRef.current = false;
+      hasRequestedLayoutRef.current = false;
     }, [
       items,
       columns,
       columnGapValue,
       rowGapValue,
       paddingValues,
-      estimateItemHeight,
       onBeforeLayout,
       onLayout,
       onLayoutComplete,
@@ -486,52 +463,9 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       });
     }, [viewportInfo.scrollTop, containerRef]);
 
-    // ===== 计算可见项 =====
-    const calculateVisibleItems = useCallback(() => {
-      const container = containerRef.current;
-      if (!container) return;
-
-      const scrollTop = container.scrollTop;
-      const clientHeight = container.clientHeight;
-      const viewportTop = scrollTop - overscan * estimateItemHeight;
-      const viewportBottom =
-        scrollTop + clientHeight + overscan * estimateItemHeight;
-
-      const newVisibleItems = new Set<number>();
-      const prevVisibleItems = new Set(visibleItems);
-
-      itemPositions.forEach((position, index) => {
-        const itemTop = position.y;
-        const itemBottom = position.y + position.height;
-
-        if (itemBottom >= viewportTop && itemTop <= viewportBottom) {
-          newVisibleItems.add(index);
-
-          // 触发进入视口事件
-          if (!prevVisibleItems.has(index) && onItemEnterViewport) {
-            onItemEnterViewport(index);
-          }
-        } else if (prevVisibleItems.has(index) && onItemLeaveViewport) {
-          // 触发离开视口事件
-          onItemLeaveViewport(index);
-        }
-      });
-
-      setVisibleItems(newVisibleItems);
-    }, [
-      itemPositions,
-      overscan,
-      estimateItemHeight,
-      visibleItems,
-      onItemEnterViewport,
-      onItemLeaveViewport,
-      containerRef,
-    ]);
-
     // ===== 滚动处理 =====
     const handleScroll = useCallback(() => {
       updateViewportInfo();
-      calculateVisibleItems();
 
       const container = containerRef.current;
       if (!container) return;
@@ -560,13 +494,7 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       scrollTimerRef.current = window.setTimeout(() => {
         setViewportInfo((prev) => ({ ...prev, isScrolling: false }));
       }, 150);
-    }, [
-      updateViewportInfo,
-      calculateVisibleItems,
-      onScroll,
-      onReachBottom,
-      containerRef,
-    ]);
+    }, [updateViewportInfo, onScroll, onReachBottom, containerRef]);
 
     // ===== 尺寸变化处理 =====
     const handleResize = useCallback(
@@ -586,14 +514,11 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       [onResize, throttledCalculateLayout]
     );
 
-    // ===== 挂载时 =====
+    // 挂载时初始化
     useEffect(() => {
       if (onMount) onMount();
+      if (!hasInitialLayoutRef.current) calculateLayout();
 
-      // 初始布局
-      calculateLayout();
-
-      // 监听容器尺寸变化
       const container = containerRef.current;
       if (container) {
         resizeObserverRef.current = new ResizeObserver(handleResize);
@@ -602,26 +527,24 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
 
       return () => {
         if (onUnmount) onUnmount();
-        if (resizeObserverRef.current) {
-          resizeObserverRef.current.disconnect();
-        }
-        if (scrollTimerRef.current) {
-          window.clearTimeout(scrollTimerRef.current);
-        }
-        if (layoutTimerRef.current) {
-          window.clearTimeout(layoutTimerRef.current);
-        }
+        resizeObserverRef.current?.disconnect();
+        if (scrollTimerRef.current) window.clearTimeout(scrollTimerRef.current);
+        if (layoutTimerRef.current) window.clearTimeout(layoutTimerRef.current);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // ===== items 变化时重新布局 =====
+    // items 变化时重新布局
     useEffect(() => {
+      hasInitialLayoutRef.current = false;
+      hasRequestedLayoutRef.current = false;
       throttledCalculateLayout();
     }, [items, throttledCalculateLayout]);
 
-    // ===== columns 变化时重新布局 =====
+    // columns 变化时重新布局
     useEffect(() => {
+      hasInitialLayoutRef.current = false;
+      hasRequestedLayoutRef.current = false;
       calculateLayout();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [columns]);
@@ -669,52 +592,55 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       getAllItemPositions: () => itemPositions,
       getColumnHeights: () => layoutInfo.columnHeights,
       getLayoutInfo: () => layoutInfo,
-      getViewportInfo: () => viewportInfo,
-      getVisibleItems: () => visibleItems,
+      getViewportInfo: () => {
+        const container = containerRef.current;
+        if (!container) return viewportInfo;
+        return {
+          scrollTop: container.scrollTop,
+          scrollLeft: container.scrollLeft,
+          scrollHeight: container.scrollHeight,
+          scrollWidth: container.scrollWidth,
+          clientHeight: container.clientHeight,
+          clientWidth: container.clientWidth,
+          isScrolling: viewportInfo.isScrolling,
+          direction: viewportInfo.direction,
+        };
+      },
       forceUpdate: () => forceUpdateState({}),
       getContainer: () => containerRef.current,
       getItemElement: (index) => itemRefsMap.current.get(index) || null,
       measureItem: async (index) => {
         const element = itemRefsMap.current.get(index);
-        if (!element) {
-          return { width: 0, height: 0 };
-        }
-        return {
-          width: element.offsetWidth,
-          height: element.offsetHeight,
-        };
+        if (!element) return { width: 0, height: 0 };
+        return { width: element.offsetWidth, height: element.offsetHeight };
       },
     }));
 
-    // ===== 渲染项 =====
+    // 渲染项
     const renderItems = () => {
-      // 虚拟滚动：只渲染可见项
-      const itemsToRender = virtual
-        ? Array.from(visibleItems)
-        : items.map((_, i) => i);
-
-      return itemsToRender.map((index) => {
-        const item = items[index];
-        if (!item) return null;
-
-        const position = itemPositions.get(index);
-        if (!position) return null;
-
+      return items.map((item, index) => {
         const key = keyExtractor(item, index);
+        const position = itemPositions.get(index);
 
-        const itemPositionStyle: React.CSSProperties = useTransform
-          ? {
-              position: "absolute",
-              transform: `translate(${position.x}px, ${position.y}px)`,
-              width: position.width,
-              boxSizing: "border-box", // 确保宽度包含 padding 和 border
-            }
+        const itemPositionStyle: React.CSSProperties = position
+          ? useTransform
+            ? {
+                position: "absolute",
+                transform: `translate(${position.x}px, ${position.y}px)`,
+                width: position.width,
+                boxSizing: "border-box",
+              }
+            : {
+                position: "absolute",
+                left: position.x,
+                top: position.y,
+                width: position.width,
+                boxSizing: "border-box",
+              }
           : {
               position: "absolute",
-              left: position.x,
-              top: position.y,
-              width: position.width,
-              boxSizing: "border-box", // 确保宽度包含 padding 和 border
+              opacity: 0,
+              pointerEvents: "none",
             };
 
         return (
@@ -724,19 +650,23 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
               if (el) {
                 itemRefsMap.current.set(index, el);
                 if (onItemMount) onItemMount(index, el);
+                if (
+                  hasInitialLayoutRef.current &&
+                  !position &&
+                  !isCalculatingLayoutRef.current &&
+                  !hasRequestedLayoutRef.current
+                ) {
+                  hasRequestedLayoutRef.current = true;
+                  requestAnimationFrame(() => calculateLayout());
+                }
               } else {
                 itemRefsMap.current.delete(index);
                 if (onItemUnmount) onItemUnmount(index);
               }
             }}
-            style={{
-              ...itemPositionStyle,
-              ...itemStyle,
-            }}
+            style={{ ...itemPositionStyle, ...itemStyle }}
             className={itemClassName}
-            onClick={(e) => {
-              if (onItemClick) onItemClick(index, item, e);
-            }}
+            onClick={(e) => onItemClick?.(index, item, e)}
             data-index={index}
           >
             {renderItem(item, index)}
@@ -745,32 +675,28 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       });
     };
 
-    // ===== 渲染 =====
     return (
       <div
         ref={containerRef as React.LegacyRef<HTMLDivElement>}
         style={{
           position: "relative",
-          overflowX: "hidden", // 禁止横向滚动
-          overflowY: "auto", // 允许纵向滚动
+          overflowX: "hidden",
+          overflowY: "auto",
           ...containerStyle,
         }}
         className={containerClassName}
         onScroll={handleScroll}
       >
-        {/* 占位容器（用于撑开滚动高度） */}
         <div
           style={{
             position: "relative",
             width: "100%",
             height: layoutInfo.totalHeight,
-            minWidth: 0, // 防止内容撑开容器宽度
+            minWidth: 0,
           }}
         >
           {renderItems()}
         </div>
-
-        {/* 插件覆盖层 */}
         {children}
       </div>
     );

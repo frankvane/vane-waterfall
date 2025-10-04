@@ -30,10 +30,10 @@ WaterfallPlugin/
 
 ### 2. 高性能
 
-- **虚拟滚动**: 支持虚拟滚动，只渲染可见区域的项
 - **智能布局**: 使用瀑布流算法自动计算最优布局
 - **Transform 定位**: 使用 transform 而非 left/top，提升渲染性能
 - **节流防抖**: 内置滚动和尺寸变化的节流防抖处理
+- **虚拟滚动**: 通过专业插件（如 react-window）实现，保持核心简洁
 
 ### 3. 完整的类型支持
 
@@ -122,25 +122,22 @@ function MyEnhancedWaterfall() {
 
 ### WaterfallCore Props
 
-| 属性                 | 类型                                           | 默认值        | 说明                       |
-| -------------------- | ---------------------------------------------- | ------------- | -------------------------- |
-| `items`              | `T[]`                                          | **必填**      | 数据源                     |
-| `renderItem`         | `(item: T, index: number) => ReactNode`        | **必填**      | 项渲染函数                 |
-| `keyExtractor`       | `(item: T, index: number) => string \| number` | `(_, i) => i` | 键提取函数                 |
-| `columns`            | `number`                                       | `3`           | 列数                       |
-| `gap`                | `number`                                       | `16`          | 间距（px）                 |
-| `rowGap`             | `number`                                       | `gap`         | 行间距                     |
-| `columnGap`          | `number`                                       | `gap`         | 列间距                     |
-| `padding`            | `number \| PaddingObject`                      | `0`           | 容器内边距                 |
-| `virtual`            | `boolean`                                      | `false`       | 是否启用虚拟滚动           |
-| `estimateItemHeight` | `number`                                       | `300`         | 预估项高度（用于虚拟滚动） |
-| `overscan`           | `number`                                       | `2`           | 预渲染项数                 |
-| `useTransform`       | `boolean`                                      | `true`        | 是否使用 transform 定位    |
-| `containerStyle`     | `CSSProperties`                                | -             | 容器样式                   |
-| `containerClassName` | `string`                                       | -             | 容器类名                   |
-| `itemStyle`          | `CSSProperties`                                | -             | 项样式                     |
-| `itemClassName`      | `string`                                       | -             | 项类名                     |
-| `debug`              | `boolean`                                      | `false`       | 是否启用调试模式           |
+| 属性                 | 类型                                           | 默认值        | 说明                    |
+| -------------------- | ---------------------------------------------- | ------------- | ----------------------- |
+| `items`              | `T[]`                                          | **必填**      | 数据源                  |
+| `renderItem`         | `(item: T, index: number) => ReactNode`        | **必填**      | 项渲染函数              |
+| `keyExtractor`       | `(item: T, index: number) => string \| number` | `(_, i) => i` | 键提取函数              |
+| `columns`            | `number`                                       | `3`           | 列数                    |
+| `gap`                | `number`                                       | `16`          | 间距（px）              |
+| `rowGap`             | `number`                                       | `gap`         | 行间距                  |
+| `columnGap`          | `number`                                       | `gap`         | 列间距                  |
+| `padding`            | `number \| PaddingObject`                      | `0`           | 容器内边距              |
+| `useTransform`       | `boolean`                                      | `true`        | 是否使用 transform 定位 |
+| `containerStyle`     | `CSSProperties`                                | -             | 容器样式                |
+| `containerClassName` | `string`                                       | -             | 容器类名                |
+| `itemStyle`          | `CSSProperties`                                | -             | 项样式                  |
+| `itemClassName`      | `string`                                       | -             | 项类名                  |
+| `debug`              | `boolean`                                      | `false`       | 是否启用调试模式        |
 
 ### WaterfallCore Ref 方法
 
@@ -431,17 +428,29 @@ const performancePlugin: WaterfallPlugin = {
 ## 📝 注意事项
 
 1. **项高度**: 为获得最佳性能，建议在数据中包含项的高度信息，避免依赖 DOM 测量
-2. **虚拟滚动**: 启用虚拟滚动时，确保设置合理的 `estimateItemHeight`
-3. **插件顺序**: 插件按优先级执行，相同优先级按注册顺序执行
-4. **内存管理**: 大量数据时建议启用虚拟滚动以减少内存占用
+2. **插件顺序**: 插件按优先级执行，相同优先级按注册顺序执行
+3. **虚拟滚动**: 如需虚拟滚动功能，建议使用专业插件（如 react-window）实现
+4. **内存管理**: 大量数据时建议通过虚拟滚动插件优化性能
 
 ## 🛠 未来计划
 
-- [ ] 实现常用插件（响应式列数、无限滚动、动画等）
-- [ ] 支持拖拽排序
-- [ ] 支持多选与批量操作
-- [ ] 支持筛选与排序
-- [ ] 添加更多示例和文档
+### 自定义插件开发
+
+- [ ] **VirtualScrollPlugin** - 基于 react-window 的虚拟滚动插件（高性能，适合大数据量）
+- [ ] **ResponsiveColumnsPlugin** - 响应式列数插件（根据屏幕宽度自动调整列数）
+- [ ] **InfiniteScrollPlugin** - 无限滚动插件（滚动到底部自动加载更多）
+- [ ] **AnimationPlugin** - 项动画插件（淡入、缩放等动画效果）
+- [ ] **SortablePlugin** - 拖拽排序插件（支持项拖拽重排）
+- [ ] **SelectionPlugin** - 多选插件（支持多选和批量操作）
+- [ ] **FilterPlugin** - 筛选插件（支持动态筛选和排序）
+- [ ] **LazyLoadPlugin** - 懒加载插件（延迟加载图片等资源）
+
+### 文档和示例
+
+- [ ] 添加插件开发指南
+- [ ] 添加虚拟滚动插件使用示例
+- [ ] 添加更多实际场景示例（图片墙、卡片列表等）
+- [ ] 完善 API 文档
 
 ## 📄 License
 

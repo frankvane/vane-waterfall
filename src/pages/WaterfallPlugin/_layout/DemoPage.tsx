@@ -14,7 +14,6 @@ type DemoPageProps = {
 const routeToFileMap: Record<string, string> = {
   "/waterfall/basic": "BasicDemo",
   "/waterfall/columns": "ColumnsDemo",
-  "/waterfall/virtual": "VirtualScrollDemo",
   "/waterfall/custom-gap": "CustomGapDemo",
   "/waterfall/ref-methods": "RefMethodsDemo",
   "/waterfall/lifecycle": "LifecycleDemo",

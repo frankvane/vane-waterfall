@@ -430,7 +430,6 @@ export function withPlugins<T = any>(
           isScrolling: false,
           direction: null,
         },
-      getVisibleItems: () => coreRef.current?.getVisibleItems() || new Set(),
       forceUpdate: () => coreRef.current?.forceUpdate(),
       getContainer: () => coreRef.current?.getContainer() || null,
       getItemElement: (index) => coreRef.current?.getItemElement(index) || null,

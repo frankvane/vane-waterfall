@@ -261,20 +261,6 @@ function MyEnhancedWaterfall() {
             自定义列数
           </NavLink>
           <NavLink
-            to="/waterfall/virtual"
-            style={{
-              padding: "12px 16px",
-              background: "#007bff",
-              color: "white",
-              borderRadius: "6px",
-              textDecoration: "none",
-              textAlign: "center",
-              transition: "background 0.2s",
-            }}
-          >
-            虚拟滚动
-          </NavLink>
-          <NavLink
             to="/waterfall/custom-gap"
             style={{
               padding: "12px 16px",

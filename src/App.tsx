@@ -9,7 +9,6 @@ import CustomGapDemo from "./pages/WaterfallPlugin/CustomGapDemo";
 import LifecycleDemo from "./pages/WaterfallPlugin/LifecycleDemo";
 import React from "react";
 import RefMethodsDemo from "./pages/WaterfallPlugin/RefMethodsDemo";
-import VirtualScrollDemo from "./pages/WaterfallPlugin/VirtualScrollDemo";
 import WaterfallHome from "./pages/WaterfallPlugin/Home";
 import WaterfallReadme from "./pages/WaterfallPlugin/ReadmeDemo";
 
@@ -30,7 +29,6 @@ const App: React.FC = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <NavLink to="/waterfall/basic">基础示例</NavLink>
             <NavLink to="/waterfall/columns">自定义列数</NavLink>
-            <NavLink to="/waterfall/virtual">虚拟滚动</NavLink>
             <NavLink to="/waterfall/custom-gap">自定义间距</NavLink>
           </div>
 
@@ -48,7 +46,6 @@ const App: React.FC = () => {
           <Route path="/readme" element={<WaterfallReadme />} />
           <Route path="/waterfall/basic" element={<BasicDemo />} />
           <Route path="/waterfall/columns" element={<ColumnsDemo />} />
-          <Route path="/waterfall/virtual" element={<VirtualScrollDemo />} />
           <Route path="/waterfall/custom-gap" element={<CustomGapDemo />} />
           <Route path="/waterfall/ref-methods" element={<RefMethodsDemo />} />
           <Route path="/waterfall/lifecycle" element={<LifecycleDemo />} />
