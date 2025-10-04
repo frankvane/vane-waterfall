@@ -13,5 +13,4 @@
  * - SelectionPlugin - 选择插件
  */
 
-// 暂时导出空对象，避免导入错误
-export {};
+export { createResponsiveColumnsPlugin } from "./ResponsiveColumns";

@@ -256,7 +256,7 @@ export function withPlugins<T = any>(
         }
       });
       return p;
-    }, [props, plugins]);
+    }, [props, plugins, viewportInfo.clientWidth]);
 
     // 生命周期钩子注入
     const enhancedProps: WaterfallCoreProps<T> = {
@@ -405,6 +405,11 @@ export function withPlugins<T = any>(
       // 尺寸变化钩子
       onResize: (width, height) => {
         transformedProps.onResize?.(width, height);
+        setViewportInfo((prev) => ({
+          ...prev,
+          clientWidth: width,
+          clientHeight: height,
+        }));
         pluginManager
           .executeHook("onResize", pluginContext, width, height)
           .catch(() => {});
