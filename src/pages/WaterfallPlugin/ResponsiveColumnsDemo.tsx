@@ -41,7 +41,14 @@ export default function ResponsiveColumnsDemo() {
       <div style={{ marginBottom: 12, color: "#666" }}>
         拖动改变窗口宽度，列数会在断点处自动变化。
       </div>
-      <div style={{ height: "100%" }}>
+      <div
+        style={{
+          height: "600px",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          overflow: "hidden",
+        }}
+      >
         <ResponsiveWaterfall
           items={items}
           gap={16}

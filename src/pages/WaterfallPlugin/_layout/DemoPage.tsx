@@ -19,6 +19,25 @@ const routeToFileMap: Record<string, string> = {
   "/waterfall/lifecycle": "LifecycleDemo",
   "/waterfall/advanced-config": "AdvancedConfigDemo",
   "/waterfall/auto-columns": "AutoColumnDemo",
+  "/waterfall/alignment-plugin": "AlignmentDemo",
+  "/waterfall/fixed-height-plugin": "FixedHeightDemo",
+  "/waterfall/gap-plugin": "GapPluginDemo",
+  "/waterfall/responsive-columns": "ResponsiveColumnsDemo",
+};
+
+// 通过显式的动态导入映射，确保 Vite 能正确打包这些原文件的 raw 文本
+const fileLoaderMap: Record<string, () => Promise<{ default: string }>> = {
+  BasicDemo: () => import("../BasicDemo.tsx?raw"),
+  ColumnsDemo: () => import("../ColumnsDemo.tsx?raw"),
+  CustomGapDemo: () => import("../CustomGapDemo.tsx?raw"),
+  RefMethodsDemo: () => import("../RefMethodsDemo.tsx?raw"),
+  LifecycleDemo: () => import("../LifecycleDemo.tsx?raw"),
+  AdvancedConfigDemo: () => import("../AdvancedConfigDemo.tsx?raw"),
+  AutoColumnDemo: () => import("../AutoColumnDemo.tsx?raw"),
+  AlignmentDemo: () => import("../AlignmentDemo.tsx?raw"),
+  FixedHeightDemo: () => import("../FixedHeightDemo.tsx?raw"),
+  GapPluginDemo: () => import("../GapPluginDemo.tsx?raw"),
+  ResponsiveColumnsDemo: () => import("../ResponsiveColumnsDemo.tsx?raw"),
 };
 
 const DemoPage: React.FC<DemoPageProps> = ({
@@ -35,9 +54,14 @@ const DemoPage: React.FC<DemoPageProps> = ({
       const fileName = routeToFileMap[location.pathname];
       if (fileName) {
         try {
-          // 动态导入源码文件（使用 ?raw 后缀）
-          const module = await import(`../${fileName}.tsx?raw`);
-          setSourceCode(module.default);
+          // 使用显式映射，避免变量路径的动态导入在构建阶段无法被静态分析
+          const loader = fileLoaderMap[fileName];
+          if (loader) {
+            const module = await loader();
+            setSourceCode(module.default);
+          } else {
+            setSourceCode("// 源码映射未找到");
+          }
         } catch (error) {
           console.error("加载源码失败:", error);
           setSourceCode("// 源码加载失败");

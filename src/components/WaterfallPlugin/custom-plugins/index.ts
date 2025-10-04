@@ -15,3 +15,6 @@
 
 export { createResponsiveColumnsPlugin } from "./ResponsiveColumns";
 export { createAutoColumnPlugin } from "./AutoColumn";
+export { createAlignmentPlugin } from "./Alignment";
+export { createGapPlugin } from "./Gap";
+export { createFixedHeightPlugin } from "./FixedHeight";

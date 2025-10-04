@@ -13,6 +13,9 @@ import ResponsiveColumnsDemo from "./pages/WaterfallPlugin/ResponsiveColumnsDemo
 import AutoColumnDemo from "./pages/WaterfallPlugin/AutoColumnDemo";
 import WaterfallHome from "./pages/WaterfallPlugin/Home";
 import WaterfallReadme from "./pages/WaterfallPlugin/ReadmeDemo";
+import AlignmentDemo from "./pages/WaterfallPlugin/AlignmentDemo";
+import FixedHeightDemo from "./pages/WaterfallPlugin/FixedHeightDemo";
+import GapPluginDemo from "./pages/WaterfallPlugin/GapPluginDemo";
 
 // Waterfall 组件导入
 
@@ -45,6 +48,9 @@ const App: React.FC = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <NavLink to="/waterfall/responsive-columns">响应式列数插件</NavLink>
             <NavLink to="/waterfall/auto-columns">自动列数插件</NavLink>
+            <NavLink to="/waterfall/alignment-plugin">对齐策略插件</NavLink>
+            <NavLink to="/waterfall/fixed-height-plugin">固定高度插件</NavLink>
+            <NavLink to="/waterfall/gap-plugin">间距插件</NavLink>
           </div>
         </nav>
       </aside>
@@ -62,6 +68,18 @@ const App: React.FC = () => {
           <Route
             path="/waterfall/auto-columns"
             element={<AutoColumnDemo />}
+          />
+          <Route
+            path="/waterfall/alignment-plugin"
+            element={<AlignmentDemo />}
+          />
+          <Route
+            path="/waterfall/fixed-height-plugin"
+            element={<FixedHeightDemo />}
+          />
+          <Route
+            path="/waterfall/gap-plugin"
+            element={<GapPluginDemo />}
           />
           <Route path="/waterfall/ref-methods" element={<RefMethodsDemo />} />
           <Route path="/waterfall/lifecycle" element={<LifecycleDemo />} />

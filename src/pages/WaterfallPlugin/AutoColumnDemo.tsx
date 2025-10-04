@@ -36,7 +36,14 @@ export default function AutoColumnDemo() {
       <div style={{ marginBottom: 12, color: "#666" }}>
         拖动改变窗口宽度，列数会在保证最小列宽的前提下自动变化。
       </div>
-      <div style={{ height: "100%" }}>
+      <div
+        style={{
+          height: "600px",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          overflow: "auto",
+        }}
+      >
         <AutoColumnsWaterfall
           items={items}
           gap={16}

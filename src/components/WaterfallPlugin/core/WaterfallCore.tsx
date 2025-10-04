@@ -71,6 +71,14 @@ export interface WaterfallCoreProps<T = any> {
   columnGap?: number;
 
   /**
+   * 列分配策略（默认 shortest）
+   * - shortest：将下一项放入当前最矮列（默认）
+   * - sequential：按顺序轮转分配列（0,1,2...）
+   * - balanced：尽量使各列项数均衡（按项数最少列放置）
+   */
+  alignmentMode?: "shortest" | "balanced" | "sequential";
+
+  /**
    * 容器内边距
    */
   padding?:
@@ -247,6 +255,7 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       gap = 16,
       rowGap,
       columnGap,
+      alignmentMode = "shortest",
       padding = 0,
       containerStyle,
       containerClassName,
@@ -370,6 +379,7 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
         (contentWidth - columnGapValue * (columns - 1)) / columns;
 
       const columnHeights = Array(columns).fill(paddingValues.top);
+      const columnCounts = Array(columns).fill(0);
       const newPositions = new Map<number, ItemPosition>();
 
       if (onLayout) onLayout();
@@ -403,13 +413,28 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
         const itemHeight = itemElement.offsetHeight;
         if (itemHeight === 0) continue;
 
-        // 线性扫描获取最矮列索引（避免 Math.min + indexOf）
         let column = 0;
-        let minHeight = columnHeights[0];
-        for (let c = 1; c < columnHeights.length; c++) {
-          if (columnHeights[c] < minHeight) {
-            minHeight = columnHeights[c];
-            column = c;
+        if (alignmentMode === "sequential") {
+          column = i % columns;
+        } else if (alignmentMode === "balanced") {
+          // 选择当前项数最少的列
+          let minCount = columnCounts[0];
+          column = 0;
+          for (let c = 1; c < columns; c++) {
+            if (columnCounts[c] < minCount) {
+              minCount = columnCounts[c];
+              column = c;
+            }
+          }
+        } else {
+          // shortest：线性扫描获取最矮列索引（避免 Math.min + indexOf）
+          let minHeight = columnHeights[0];
+          column = 0;
+          for (let c = 1; c < columnHeights.length; c++) {
+            if (columnHeights[c] < minHeight) {
+              minHeight = columnHeights[c];
+              column = c;
+            }
           }
         }
         const x = paddingValues.left + column * (columnWidth + columnGapValue);
@@ -425,6 +450,7 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
         });
 
         columnHeights[column] += itemHeight + rowGapValue;
+        columnCounts[column] += 1;
       }
 
       const totalHeight = Math.max(...columnHeights) + paddingValues.bottom;
