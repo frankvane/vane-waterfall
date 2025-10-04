@@ -10,6 +10,7 @@ import LifecycleDemo from "./pages/WaterfallPlugin/LifecycleDemo";
 import React from "react";
 import RefMethodsDemo from "./pages/WaterfallPlugin/RefMethodsDemo";
 import ResponsiveColumnsDemo from "./pages/WaterfallPlugin/ResponsiveColumnsDemo";
+import AutoColumnDemo from "./pages/WaterfallPlugin/AutoColumnDemo";
 import WaterfallHome from "./pages/WaterfallPlugin/Home";
 import WaterfallReadme from "./pages/WaterfallPlugin/ReadmeDemo";
 
@@ -40,9 +41,10 @@ const App: React.FC = () => {
             <NavLink to="/waterfall/advanced-config">高级配置</NavLink>
           </div>
 
-            <h3 style={{ marginTop: 12 }}>插件功能</h3>
+          <h3 style={{ marginTop: 12 }}>插件功能</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <NavLink to="/waterfall/responsive-columns">响应式列数插件</NavLink>
+            <NavLink to="/waterfall/auto-columns">自动列数插件</NavLink>
           </div>
         </nav>
       </aside>
@@ -56,6 +58,10 @@ const App: React.FC = () => {
           <Route
             path="/waterfall/responsive-columns"
             element={<ResponsiveColumnsDemo />}
+          />
+          <Route
+            path="/waterfall/auto-columns"
+            element={<AutoColumnDemo />}
           />
           <Route path="/waterfall/ref-methods" element={<RefMethodsDemo />} />
           <Route path="/waterfall/lifecycle" element={<LifecycleDemo />} />

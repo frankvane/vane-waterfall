@@ -14,3 +14,4 @@
  */
 
 export { createResponsiveColumnsPlugin } from "./ResponsiveColumns";
+export { createAutoColumnPlugin } from "./AutoColumn";

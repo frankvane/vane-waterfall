@@ -18,6 +18,7 @@ const routeToFileMap: Record<string, string> = {
   "/waterfall/ref-methods": "RefMethodsDemo",
   "/waterfall/lifecycle": "LifecycleDemo",
   "/waterfall/advanced-config": "AdvancedConfigDemo",
+  "/waterfall/auto-columns": "AutoColumnDemo",
 };
 
 const DemoPage: React.FC<DemoPageProps> = ({
