@@ -13,6 +13,7 @@ interface WaterfallItem {
 export default function RefMethodsDemo() {
   const waterfallRef = useRef<WaterfallCoreRef>(null);
   const [targetIndex, setTargetIndex] = useState(15);
+  const [debug, setDebug] = useState(false);
   const [layoutInfo, setLayoutInfo] = useState<string>("");
   const [visibleInfo, setVisibleInfo] = useState<string>("");
 
@@ -248,7 +249,26 @@ export default function RefMethodsDemo() {
             {visibleInfo}
           </div>
         )}
-      </div>
+        </div>
+
+        <div
+          style={{
+            marginBottom: "12px",
+            padding: "8px 12px",
+            background: "#f8f9fa",
+            borderRadius: "4px",
+            border: "1px solid #e9ecef",
+          }}
+        >
+          <label style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <input
+              type="checkbox"
+              checked={debug}
+              onChange={(e) => setDebug(e.target.checked)}
+            />
+            调试输出（布局计时 console）
+          </label>
+        </div>
 
       <div
         style={{
@@ -263,7 +283,7 @@ export default function RefMethodsDemo() {
           items={items}
           columns={3}
           gap={16}
-          debug={true}
+          debug={debug}
           renderItem={(item: WaterfallItem) => (
             <div
               style={{
@@ -278,6 +298,14 @@ export default function RefMethodsDemo() {
                 fontSize: "18px",
                 color: "#333",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.currentTarget.click();
+                }
               }}
             >
               {item.title}

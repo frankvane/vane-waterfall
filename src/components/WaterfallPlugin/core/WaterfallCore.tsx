@@ -279,9 +279,11 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
     const internalItemRefsMap = useRef<Map<number, HTMLElement>>(new Map());
     const containerRef = containerRefExternal || internalContainerRef;
     const itemRefsMap = itemRefsExternal || internalItemRefsMap;
+    const itemResizeObserversRef = useRef<Map<number, ResizeObserver>>(new Map());
     const resizeObserverRef = useRef<ResizeObserver | null>(null);
     const scrollTimerRef = useRef<number>();
     const layoutTimerRef = useRef<number>();
+    const lastScrollTimeRef = useRef<number>(0);
 
     // ===== State =====
     const [layoutInfo, setLayoutInfo] = useState<LayoutInfo>({
@@ -318,6 +320,9 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
 
     const [, forceUpdateState] = useState({});
 
+    // 跟踪当前视口内的项
+    const visibleItemsRef = useRef<Set<number>>(new Set());
+
     // ===== 计算内边距 =====
     const paddingValues = useMemo(() => {
       if (typeof padding === "number") {
@@ -339,7 +344,7 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
     const calculateLayout = useCallback(async () => {
       const container = containerRef.current;
       const itemRefs = itemRefsMap.current;
-      if (!container || items.length === 0) return;
+      if (!container) return;
 
       // 防止重复计算
       if (isCalculatingLayoutRef.current) return;
@@ -369,6 +374,27 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
 
       if (onLayout) onLayout();
 
+      // 空数据时仍更新布局信息，避免高度残留
+      if (items.length === 0) {
+        const totalHeight = paddingValues.top + paddingValues.bottom;
+        setLayoutInfo({
+          columns,
+          columnWidth,
+          gap: columnGapValue,
+          columnHeights,
+          totalHeight,
+          containerWidth,
+          containerHeight: container.clientHeight,
+        });
+        setItemPositions(new Map());
+        hasInitialLayoutRef.current = true;
+        if (onLayoutComplete) onLayoutComplete();
+        if (debug) console.timeEnd("[WaterfallCore] Layout");
+        isCalculatingLayoutRef.current = false;
+        hasRequestedLayoutRef.current = false;
+        return;
+      }
+
       // 计算每个项的位置
       for (let i = 0; i < items.length; i++) {
         const itemElement = itemRefs.get(i);
@@ -377,7 +403,15 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
         const itemHeight = itemElement.offsetHeight;
         if (itemHeight === 0) continue;
 
-        const column = columnHeights.indexOf(Math.min(...columnHeights));
+        // 线性扫描获取最矮列索引（避免 Math.min + indexOf）
+        let column = 0;
+        let minHeight = columnHeights[0];
+        for (let c = 1; c < columnHeights.length; c++) {
+          if (columnHeights[c] < minHeight) {
+            minHeight = columnHeights[c];
+            column = c;
+          }
+        }
         const x = paddingValues.left + column * (columnWidth + columnGapValue);
         const y = columnHeights[column];
 
@@ -443,17 +477,23 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       if (!container) return;
 
       const prevScrollTop = viewportInfo.scrollTop;
+      const prevScrollLeft = viewportInfo.scrollLeft;
       const newScrollTop = container.scrollTop;
+      const newScrollLeft = container.scrollLeft;
       const direction =
         newScrollTop > prevScrollTop
           ? "down"
           : newScrollTop < prevScrollTop
           ? "up"
+          : newScrollLeft > prevScrollLeft
+          ? "right"
+          : newScrollLeft < prevScrollLeft
+          ? "left"
           : null;
 
       setViewportInfo({
         scrollTop: newScrollTop,
-        scrollLeft: container.scrollLeft,
+        scrollLeft: newScrollLeft,
         scrollHeight: container.scrollHeight,
         scrollWidth: container.scrollWidth,
         clientHeight: container.clientHeight,
@@ -461,29 +501,67 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
         isScrolling: true,
         direction,
       });
-    }, [viewportInfo.scrollTop, containerRef]);
+    }, [viewportInfo.scrollTop, viewportInfo.scrollLeft, containerRef]);
 
     // ===== 滚动处理 =====
     const handleScroll = useCallback(() => {
+      const now = Date.now();
       updateViewportInfo();
 
       const container = containerRef.current;
       if (!container) return;
 
-      // 触发 onScroll 钩子
       if (onScroll) {
         onScroll(container.scrollTop, container.scrollLeft);
       }
 
-      // 检查是否到达底部
-      if (onReachBottom) {
-        const scrollTop = container.scrollTop;
-        const scrollHeight = container.scrollHeight;
-        const clientHeight = container.clientHeight;
-        const distanceToBottom = scrollHeight - (scrollTop + clientHeight);
+      // 轻量节流：仅在超过 throttleDelay 时运行较重逻辑
+      if (now - lastScrollTimeRef.current >= throttleDelay) {
+        lastScrollTimeRef.current = now;
 
-        if (distanceToBottom < 100) {
-          onReachBottom(distanceToBottom);
+        // 检查到达底部
+        if (onReachBottom) {
+          const scrollTop = container.scrollTop;
+          const scrollHeight = container.scrollHeight;
+          const clientHeight = container.clientHeight;
+          const distanceToBottom = scrollHeight - (scrollTop + clientHeight);
+
+          if (distanceToBottom < 100) {
+            onReachBottom(distanceToBottom);
+          }
+        }
+
+        // 检查视口内的项
+        if (onItemEnterViewport || onItemLeaveViewport) {
+          const scrollTop = container.scrollTop;
+          const clientHeight = container.clientHeight;
+          const newVisibleItems = new Set<number>();
+
+          itemPositions.forEach((position, index) => {
+            const itemTop = position.y;
+            const itemBottom = position.y + position.height;
+            const isVisible =
+              itemBottom > scrollTop && itemTop < scrollTop + clientHeight;
+
+            if (isVisible) {
+              newVisibleItems.add(index);
+              // 新进入视口
+              if (!visibleItemsRef.current.has(index) && onItemEnterViewport) {
+                onItemEnterViewport(index);
+              }
+            }
+          });
+
+          // 检查离开视口的项
+          if (onItemLeaveViewport) {
+            visibleItemsRef.current.forEach((index) => {
+              if (!newVisibleItems.has(index)) {
+                onItemLeaveViewport(index);
+              }
+            });
+          }
+
+          visibleItemsRef.current = newVisibleItems;
         }
       }
 
@@ -493,8 +571,18 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       }
       scrollTimerRef.current = window.setTimeout(() => {
         setViewportInfo((prev) => ({ ...prev, isScrolling: false }));
-      }, 150);
-    }, [updateViewportInfo, onScroll, onReachBottom, containerRef]);
+      }, debounceDelay);
+    }, [
+      updateViewportInfo,
+      onScroll,
+      onReachBottom,
+      onItemEnterViewport,
+      onItemLeaveViewport,
+      containerRef,
+      itemPositions,
+      throttleDelay,
+      debounceDelay,
+    ]);
 
     // ===== 尺寸变化处理 =====
     const handleResize = useCallback(
@@ -649,6 +737,17 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
             ref={(el) => {
               if (el) {
                 itemRefsMap.current.set(index, el);
+                // 监听单项尺寸变化（如图片加载），触发重新布局
+                const existing = itemResizeObserversRef.current.get(index);
+                if (!existing) {
+                  const ro = new ResizeObserver(() => {
+                    throttledCalculateLayout();
+                  });
+                  try {
+                    ro.observe(el);
+                    itemResizeObserversRef.current.set(index, ro);
+                  } catch {}
+                }
                 if (onItemMount) onItemMount(index, el);
                 if (
                   hasInitialLayoutRef.current &&
@@ -661,6 +760,13 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
                 }
               } else {
                 itemRefsMap.current.delete(index);
+                const ro = itemResizeObserversRef.current.get(index);
+                if (ro) {
+                  try {
+                    ro.disconnect();
+                  } catch {}
+                  itemResizeObserversRef.current.delete(index);
+                }
                 if (onItemUnmount) onItemUnmount(index);
               }
             }}

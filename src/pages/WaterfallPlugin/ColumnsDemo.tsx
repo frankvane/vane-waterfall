@@ -71,6 +71,14 @@ export default function ColumnsDemo() {
                 color: "#333",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
               }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.currentTarget.click();
+                }
+              }}
             >
               {item.title}
             </div>

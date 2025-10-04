@@ -19,7 +19,9 @@ interface LogEntry {
 export default function LifecycleDemo() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [itemCount, setItemCount] = useState(30);
+  const [autoScroll, setAutoScroll] = useState(false);
   const logsEndRef = useRef<HTMLDivElement>(null);
+  const logsContainerRef = useRef<HTMLDivElement>(null);
 
   const items = useMemo(() => {
     return Array.from({ length: itemCount }, (_, i) => ({
@@ -33,9 +35,16 @@ export default function LifecycleDemo() {
   const addLog = useCallback((event: string, detail: string) => {
     const time = new Date().toLocaleTimeString();
     setLogs((prev) => [...prev.slice(-19), { time, event, detail }]);
-    // 自动滚动到底部
+    // 仅在启用自动滚动且用户当前接近底部时，滚动到底部
     setTimeout(() => {
-      logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      const container = logsContainerRef.current;
+      if (!container) return;
+      const nearBottom =
+        container.scrollTop + container.clientHeight >=
+        container.scrollHeight - 8; // 距离底部阈值
+      if (autoScroll && nearBottom) {
+        logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }
     }, 100);
   }, []);
 
@@ -56,9 +65,14 @@ export default function LifecycleDemo() {
     addLog("onLayoutComplete", "布局计算完成");
   }, [addLog]);
 
+  const scrollCountRef = useRef(0);
   const handleScroll = useCallback(
     (scrollTop: number) => {
-      addLog("onScroll", `滚动位置: ${scrollTop.toFixed(0)}px`);
+      scrollCountRef.current++;
+      // 每 5 次滚动记录一次，避免日志过多
+      if (scrollCountRef.current % 5 === 0) {
+        addLog("onScroll", `滚动位置: ${scrollTop.toFixed(0)}px`);
+      }
     },
     [addLog]
   );
@@ -151,6 +165,14 @@ export default function LifecycleDemo() {
             <span style={{ marginLeft: "12px", color: "#666" }}>
               当前项数: {itemCount}
             </span>
+            <label style={{ marginLeft: "16px", color: "#666", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <input
+                type="checkbox"
+                checked={autoScroll}
+                onChange={(e) => setAutoScroll(e.target.checked)}
+              />
+              自动滚动到底部（仅当接近底部时）
+            </label>
           </div>
 
           <div
@@ -164,6 +186,7 @@ export default function LifecycleDemo() {
               fontFamily: "monospace",
               fontSize: "13px",
             }}
+            ref={logsContainerRef}
           >
             <div
               style={{
@@ -257,6 +280,14 @@ export default function LifecycleDemo() {
                 boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                 cursor: "pointer",
                 transition: "transform 0.2s",
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.currentTarget.click();
+                }
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.05)";

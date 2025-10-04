@@ -157,7 +157,28 @@ export function withPlugins<T = any>(
         getItemPosition: (index: number) => itemPositions.get(index) || null,
         viewport: viewportInfo,
         visibleItems,
-        visibleRange: { start: 0, end: visibleItems.size },
+        // 通过视口与项位置计算真实可见范围（最小/最大可见索引）
+        visibleRange: (() => {
+          const container = containerRef.current;
+          if (!container || itemPositions.size === 0) return { start: 0, end: 0 };
+          const vt = container.scrollTop;
+          const vb = vt + container.clientHeight;
+          let minIndex: number | null = null;
+          let maxIndex: number | null = null;
+          itemPositions.forEach((pos, idx) => {
+            const it = pos.y;
+            const ib = pos.y + pos.height;
+            const overlap = Math.max(0, Math.min(vb, ib) - Math.max(vt, it));
+            if (overlap > 0) {
+              if (minIndex === null || idx < minIndex) minIndex = idx;
+              if (maxIndex === null || idx > maxIndex) maxIndex = idx;
+            }
+          });
+          return {
+            start: minIndex ?? 0,
+            end: maxIndex ?? 0,
+          };
+        })(),
         isLayouting,
         isScrolling: viewportInfo.isScrolling,
         isDragging: false,
@@ -211,23 +232,7 @@ export function withPlugins<T = any>(
       };
     }, [plugins, pluginManager, enableDebug]);
 
-    // 挂载时触发插件钩子
-    useEffect(() => {
-      const cleanups: Array<void | (() => void)> = [];
-
-      plugins.forEach((plugin) => {
-        const cleanup = plugin.hooks.onMount?.(pluginContext);
-        if (cleanup) cleanups.push(cleanup);
-      });
-
-      pluginManager.executeHook("onMount", pluginContext).catch(() => {});
-
-      return () => {
-        pluginManager.executeHook("onUnmount", pluginContext).catch(() => {});
-        cleanups.forEach((fn) => typeof fn === "function" && fn());
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // 说明：onMount/onUnmount 生命周期统一由核心组件回调触发，避免重复执行
 
     // Props 变化时触发插件钩子
     const prevPropsRef = useRef(props);
@@ -258,6 +263,8 @@ export function withPlugins<T = any>(
       ...transformedProps,
       containerRefExternal: containerRef,
       itemRefsExternal: itemRefsMap,
+      // 将 enableDebug 作为默认值传递给核心的 debug（用户显式设置优先）
+      debug: transformedProps.debug ?? enableDebug,
 
       // 挂载/卸载
       onMount: () => {
@@ -312,26 +319,68 @@ export function withPlugins<T = any>(
       },
       onItemEnterViewport: (index) => {
         transformedProps.onItemEnterViewport?.(index);
-        pluginManager
-          .executeHook("onItemEnterViewport", pluginContext, index, {
+        // 计算真实可见性信息
+        const container = containerRef.current;
+        const pos = itemPositions.get(index);
+        const visibility = (() => {
+          if (!container || !pos) {
+            return {
+              index,
+              isVisible: true,
+              visibleRatio: 1,
+              isAboveViewport: false,
+              isBelowViewport: false,
+            };
+          }
+          const vt = container.scrollTop;
+          const vb = vt + container.clientHeight;
+          const it = pos.y;
+          const ib = pos.y + pos.height;
+          const overlap = Math.max(0, Math.min(vb, ib) - Math.max(vt, it));
+          const ratio = Math.min(1, Math.max(0, overlap / pos.height));
+          return {
             index,
-            isVisible: true,
-            visibleRatio: 1,
-            isAboveViewport: false,
-            isBelowViewport: false,
-          })
+            isVisible: overlap > 0,
+            visibleRatio: ratio,
+            isAboveViewport: ib <= vt,
+            isBelowViewport: it >= vb,
+          };
+        })();
+        pluginManager
+          .executeHook("onItemEnterViewport", pluginContext, index, visibility)
           .catch(() => {});
       },
       onItemLeaveViewport: (index) => {
         transformedProps.onItemLeaveViewport?.(index);
-        pluginManager
-          .executeHook("onItemLeaveViewport", pluginContext, index, {
+        // 计算真实可见性信息
+        const container = containerRef.current;
+        const pos = itemPositions.get(index);
+        const visibility = (() => {
+          if (!container || !pos) {
+            return {
+              index,
+              isVisible: false,
+              visibleRatio: 0,
+              isAboveViewport: false,
+              isBelowViewport: false,
+            };
+          }
+          const vt = container.scrollTop;
+          const vb = vt + container.clientHeight;
+          const it = pos.y;
+          const ib = pos.y + pos.height;
+          const overlap = Math.max(0, Math.min(vb, ib) - Math.max(vt, it));
+          const ratio = Math.min(1, Math.max(0, overlap / pos.height));
+          return {
             index,
-            isVisible: false,
-            visibleRatio: 0,
-            isAboveViewport: false,
-            isBelowViewport: false,
-          })
+            isVisible: overlap > 0,
+            visibleRatio: ratio,
+            isAboveViewport: ib <= vt,
+            isBelowViewport: it >= vb,
+          };
+        })();
+        pluginManager
+          .executeHook("onItemLeaveViewport", pluginContext, index, visibility)
           .catch(() => {});
       },
 
