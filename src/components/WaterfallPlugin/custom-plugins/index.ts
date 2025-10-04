@@ -18,3 +18,4 @@ export { createAutoColumnPlugin } from "./AutoColumn";
 export { createAlignmentPlugin } from "./Alignment";
 export { createGapPlugin } from "./Gap";
 export { createFixedHeightPlugin } from "./FixedHeight";
+export { createVirtualWaterfallPlugin } from "./VirtualWaterfall";

@@ -274,6 +274,20 @@ function MyEnhancedWaterfall() {
           >
             自定义间距
           </NavLink>
+          <NavLink
+            to="/waterfall/virtual-scroll"
+            style={{
+              padding: "12px 16px",
+              background: "#007bff",
+              color: "white",
+              borderRadius: "6px",
+              textDecoration: "none",
+              textAlign: "center",
+              transition: "background 0.2s",
+            }}
+          >
+            虚拟滚动插件
+          </NavLink>
         </div>
 
         <h3 style={{ fontSize: "1.2em", marginBottom: "12px", color: "#666" }}>

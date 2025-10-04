@@ -111,7 +111,6 @@ export interface WaterfallCoreProps<T = any> {
    * 是否使用 transform 定位（性能更好）
    */
   useTransform?: boolean;
-
   /**
    * 节流延迟（ms）
    */
@@ -262,6 +261,7 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       itemStyle,
       itemClassName,
       useTransform = true,
+
       throttleDelay = 16,
       debounceDelay = 150,
       onMount,
@@ -408,9 +408,7 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
       // 计算每个项的位置
       for (let i = 0; i < items.length; i++) {
         const itemElement = itemRefs.get(i);
-        if (!itemElement) continue;
-
-        const itemHeight = itemElement.offsetHeight;
+        const itemHeight = itemElement?.offsetHeight || 0;
         if (itemHeight === 0) continue;
 
         let column = 0;

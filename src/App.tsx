@@ -3,19 +3,21 @@ import "./App.css";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 
 import AdvancedConfigDemo from "./pages/WaterfallPlugin/AdvancedConfigDemo";
+import VirtualDynamicDemo from "./pages/WaterfallPlugin/VirtualDynamicDemo";
+import AlignmentDemo from "./pages/WaterfallPlugin/AlignmentDemo";
+import AutoColumnDemo from "./pages/WaterfallPlugin/AutoColumnDemo";
 import BasicDemo from "./pages/WaterfallPlugin/BasicDemo";
 import ColumnsDemo from "./pages/WaterfallPlugin/ColumnsDemo";
 import CustomGapDemo from "./pages/WaterfallPlugin/CustomGapDemo";
+import FixedHeightDemo from "./pages/WaterfallPlugin/FixedHeightDemo";
+import GapPluginDemo from "./pages/WaterfallPlugin/GapPluginDemo";
 import LifecycleDemo from "./pages/WaterfallPlugin/LifecycleDemo";
 import React from "react";
 import RefMethodsDemo from "./pages/WaterfallPlugin/RefMethodsDemo";
 import ResponsiveColumnsDemo from "./pages/WaterfallPlugin/ResponsiveColumnsDemo";
-import AutoColumnDemo from "./pages/WaterfallPlugin/AutoColumnDemo";
+import VirtualImageDemo from "./pages/WaterfallPlugin/VirtualImageDemo";
 import WaterfallHome from "./pages/WaterfallPlugin/Home";
 import WaterfallReadme from "./pages/WaterfallPlugin/ReadmeDemo";
-import AlignmentDemo from "./pages/WaterfallPlugin/AlignmentDemo";
-import FixedHeightDemo from "./pages/WaterfallPlugin/FixedHeightDemo";
-import GapPluginDemo from "./pages/WaterfallPlugin/GapPluginDemo";
 
 // Waterfall 组件导入
 
@@ -51,6 +53,8 @@ const App: React.FC = () => {
             <NavLink to="/waterfall/alignment-plugin">对齐策略插件</NavLink>
             <NavLink to="/waterfall/fixed-height-plugin">固定高度插件</NavLink>
             <NavLink to="/waterfall/gap-plugin">间距插件</NavLink>
+            <NavLink to="/waterfall/virtual-images">虚拟瀑布流</NavLink>
+            <NavLink to="/waterfall/virtual-dynamic">虚拟瀑布流（动态高度）</NavLink>
           </div>
         </nav>
       </aside>
@@ -81,6 +85,8 @@ const App: React.FC = () => {
             path="/waterfall/gap-plugin"
             element={<GapPluginDemo />}
           />
+          <Route path="/waterfall/virtual-images" element={<VirtualImageDemo />} />
+          <Route path="/waterfall/virtual-dynamic" element={<VirtualDynamicDemo />} />
           <Route path="/waterfall/ref-methods" element={<RefMethodsDemo />} />
           <Route path="/waterfall/lifecycle" element={<LifecycleDemo />} />
           <Route

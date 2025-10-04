@@ -23,6 +23,8 @@ const routeToFileMap: Record<string, string> = {
   "/waterfall/fixed-height-plugin": "FixedHeightDemo",
   "/waterfall/gap-plugin": "GapPluginDemo",
   "/waterfall/responsive-columns": "ResponsiveColumnsDemo",
+  "/waterfall/virtual-images": "VirtualImageDemo",
+  "/waterfall/virtual-dynamic": "VirtualDynamicDemo",
 };
 
 // 通过显式的动态导入映射，确保 Vite 能正确打包这些原文件的 raw 文本
@@ -38,6 +40,8 @@ const fileLoaderMap: Record<string, () => Promise<{ default: string }>> = {
   FixedHeightDemo: () => import("../FixedHeightDemo.tsx?raw"),
   GapPluginDemo: () => import("../GapPluginDemo.tsx?raw"),
   ResponsiveColumnsDemo: () => import("../ResponsiveColumnsDemo.tsx?raw"),
+  VirtualImageDemo: () => import("../VirtualImageDemo.tsx?raw"),
+  VirtualDynamicDemo: () => import("../VirtualDynamicDemo.tsx?raw"),
 };
 
 const DemoPage: React.FC<DemoPageProps> = ({
