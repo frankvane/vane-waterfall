@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
+import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
 
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
 import { createResponsiveColumnsPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface WaterfallItem {
@@ -14,6 +14,7 @@ interface WaterfallItem {
 const ResponsiveWaterfall = withPlugins(WaterfallCore, [
   createResponsiveColumnsPlugin({
     breakpoints: {
+      xs: { width: 0, columns: 1 },
       sm: { width: 640, columns: 2 },
       md: { width: 768, columns: 3 },
       lg: { width: 1024, columns: 4 },
@@ -44,7 +45,8 @@ export default function ResponsiveColumnsDemo() {
         <ResponsiveWaterfall
           items={items}
           gap={16}
-          containerStyle={{ height: "100%", background: "#f5f5f5", padding: 16 }}
+          padding={16}
+          containerStyle={{ height: "100%", background: "#f5f5f5" }}
           renderItem={(item: WaterfallItem) => (
             <div
               role="button"
