@@ -21,31 +21,31 @@
 - SearchPlugin（搜索）：`Search/`
   - 支持搜索条件变化回顶（`scrollToTop`、`scrollBehavior`；或组件级 `scrollToTopOnSearchChange` 覆盖）
 - VirtualWaterfallPlugin（虚拟瀑布流）：`VirtualWaterfall/`
+- GroupingPlugin（分组与区段标题）：`Grouping/`
+- StickyHeaderPlugin（区块/导航吸顶）：`StickyHeader/`
+- ScrollAnchorPlugin（滚动锚点）：`ScrollAnchor/`
+- DragReorderPlugin（拖拽重新排序并增量重排布局）：`DragReorder/`
+- ClickAnalyticsPlugin（点击分析）：`ClickAnalytics/`
+- BookmarkPlugin（位置记忆/书签）：`Bookmark/`
+- StatePersistencePlugin（状态快照与恢复：返回保留滚动与布局）：`StatePersistence/`
+- URLSyncPlugin（URL 状态同步：分页/筛选/排序/搜索）：`URLSync/`
 
 ## 待开发瀑布流插件（建议优先级可根据需求调整）
 - BatchRenderPlugin（批量渲染）：`BatchRender/`（待补充实现）
 - CachePlugin（布局缓存）：`Cache/`（待补充实现）
 - PerformanceMonitorPlugin（性能监控）
 - ViewportTrackingPlugin（可见性追踪）
-- ClickAnalyticsPlugin（点击分析）
 - ScrollDepthPlugin（滚动深度）
 - ErrorTrackingPlugin（错误追踪）
 - TransitionPlugin（布局变化过渡）
 - KeyboardNavigationPlugin（键盘导航）
 - TouchGesturePlugin（触摸手势）
-- BookmarkPlugin（位置记忆/书签）
 - SharePlugin（分享）
 - A11yPlugin（可访问性增强）
 - AnnouncerPlugin（屏幕阅读器播报）
 - ReducedMotionPlugin（减少动画，尊重系统偏好）
 
 ### 更多可开发插件（扩展）
-- URLSyncPlugin（URL 状态同步：分页/筛选/排序/搜索）：`URLSync/`
-- StatePersistencePlugin（状态快照与恢复：返回保留滚动与布局）：`StatePersistence/`
-- GroupingPlugin（分组与区段标题，支持配合吸顶标题）：`Grouping/`
-- StickyHeaderPlugin（区块/导航吸顶）：`StickyHeader/`
-- ScrollAnchorPlugin（滚动锚点：快速定位到分组或指定项）：`ScrollAnchor/`
-- DragReorderPlugin（拖拽重新排序并增量重排布局）：`DragReorder/`
 - PinItemPlugin（项目置顶/固定在视口顶部或指定列）：`PinItem/`
 - RTLLayoutPlugin（从右到左布局支持与镜像渲染）：`RTLLayout/`
 - OverscanAdaptivePlugin（按滚动速度/设备性能自适应 overscan）：`OverscanAdaptive/`
