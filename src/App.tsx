@@ -34,6 +34,11 @@ import VirtualDynamicDemo from "./pages/WaterfallPlugin/VirtualDynamicDemo";
 import VirtualImageDemo from "./pages/WaterfallPlugin/VirtualImageDemo";
 import WaterfallHome from "./pages/WaterfallPlugin/Home";
 import WaterfallReadme from "./pages/WaterfallPlugin/ReadmeDemo";
+import A11yDemo from "./pages/WaterfallPlugin/A11yDemo";
+import ReducedMotionDemo from "./pages/WaterfallPlugin/ReducedMotionDemo";
+import TransitionDemo from "./pages/WaterfallPlugin/TransitionDemo";
+import PinItemDemo from "./pages/WaterfallPlugin/PinItemDemo";
+import HeatmapAnalyticsDemo from "./pages/WaterfallPlugin/HeatmapAnalyticsDemo";
 
 // Waterfall 组件导入
 
@@ -87,6 +92,11 @@ const App: React.FC = () => {
             <NavLink to="/waterfall/sticky-header-plugin">StickyHeader 插件演示</NavLink>
             <NavLink to="/waterfall/scroll-anchor-plugin">ScrollAnchor 插件演示</NavLink>
             <NavLink to="/waterfall/drag-reorder-plugin">DragReorder 插件演示</NavLink>
+            <NavLink to="/waterfall/a11y-plugin">A11y 插件演示</NavLink>
+            <NavLink to="/waterfall/reduced-motion-plugin">ReducedMotion 插件演示</NavLink>
+            <NavLink to="/waterfall/transition-plugin">Transition 插件演示</NavLink>
+            <NavLink to="/waterfall/pin-item-plugin">PinItem 插件演示</NavLink>
+            <NavLink to="/waterfall/heatmap-analytics-plugin">HeatmapAnalytics 插件演示</NavLink>
           </div>
         </nav>
       </aside>
@@ -135,6 +145,11 @@ const App: React.FC = () => {
           <Route path="/waterfall/sticky-header-plugin" element={<StickyHeaderDemo />} />
           <Route path="/waterfall/scroll-anchor-plugin" element={<ScrollAnchorDemo />} />
           <Route path="/waterfall/drag-reorder-plugin" element={<DragReorderDemo />} />
+          <Route path="/waterfall/a11y-plugin" element={<A11yDemo />} />
+          <Route path="/waterfall/reduced-motion-plugin" element={<ReducedMotionDemo />} />
+          <Route path="/waterfall/transition-plugin" element={<TransitionDemo />} />
+          <Route path="/waterfall/pin-item-plugin" element={<PinItemDemo />} />
+          <Route path="/waterfall/heatmap-analytics-plugin" element={<HeatmapAnalyticsDemo />} />
           <Route path="/waterfall/ref-methods" element={<RefMethodsDemo />} />
           <Route path="/waterfall/lifecycle" element={<LifecycleDemo />} />
           <Route

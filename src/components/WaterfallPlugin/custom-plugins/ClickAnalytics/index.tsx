@@ -17,12 +17,12 @@ export function createClickAnalyticsPlugin<T = any>(config: ClickAnalyticsConfig
     enabled: true,
     hooks: {
       onMount: (context) => {
-        context.sharedData.set("click-count", 0);
+        context.sharedData?.set("click-count", 0);
       },
       onItemClick: (context, index, item, event) => {
-        const prev = context.sharedData.get("click-count") || 0;
+        const prev = context.sharedData?.get("click-count") || 0;
         const next = prev + 1;
-        context.sharedData.set("click-count", next);
+        context.sharedData?.set("click-count", next);
         context.bus?.emit("analytics:click", { index, item, event, total: next });
         if (log) {
           // 基本日志输出，避免过多信息
@@ -30,7 +30,7 @@ export function createClickAnalyticsPlugin<T = any>(config: ClickAnalyticsConfig
         }
       },
       renderOverlay: (context) => {
-        const total = context.sharedData.get("click-count") || 0;
+        const total = context.sharedData?.get("click-count") || 0;
         return (
           <div
             style={{
@@ -46,6 +46,7 @@ export function createClickAnalyticsPlugin<T = any>(config: ClickAnalyticsConfig
               boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
               border: "1px solid rgba(255,255,255,0.15)",
               pointerEvents: "none",
+              zIndex:99
             }}
           >
             点击次数：{total}

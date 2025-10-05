@@ -32,6 +32,13 @@ export { createSearchPlugin } from "./Search";
 export { createClickAnalyticsPlugin } from "./ClickAnalytics/index.tsx";
 export { createBookmarkPlugin } from "./Bookmark/index.tsx";
 export { createURLSyncPlugin } from "./URLSync";
+// 新增：本次实现的插件
+export { createA11yPlugin } from "./A11y";
+export { createReducedMotionPlugin } from "./ReducedMotion";
+export { createTransitionPlugin } from "./Transition";
+export { createPinItemPlugin } from "./PinItem";
+export { createHeatmapAnalyticsPlugin } from "./HeatmapAnalytics";
+// WorkerLayout 插件按用户要求移除
 export { createStatePersistencePlugin } from "./StatePersistence";
 export { createGroupingPlugin } from "./Grouping/index.tsx";
 export { createStickyHeaderPlugin } from "./StickyHeader/index.tsx";

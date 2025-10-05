@@ -41,6 +41,11 @@ const routeToFileMap: Record<string, string> = {
   "/waterfall/sticky-header-plugin": "StickyHeaderDemo",
   "/waterfall/scroll-anchor-plugin": "ScrollAnchorDemo",
   "/waterfall/drag-reorder-plugin": "DragReorderDemo",
+  "/waterfall/a11y-plugin": "A11yDemo",
+  "/waterfall/reduced-motion-plugin": "ReducedMotionDemo",
+  "/waterfall/transition-plugin": "TransitionDemo",
+  "/waterfall/pin-item-plugin": "PinItemDemo",
+  "/waterfall/heatmap-analytics-plugin": "HeatmapAnalyticsDemo",
 };
 
 // 通过显式的动态导入映射，确保 Vite 能正确打包这些原文件的 raw 文本
@@ -74,6 +79,11 @@ const fileLoaderMap: Record<string, () => Promise<{ default: string }>> = {
   StickyHeaderDemo: () => import("../StickyHeaderDemo.tsx?raw"),
   ScrollAnchorDemo: () => import("../ScrollAnchorDemo.tsx?raw"),
   DragReorderDemo: () => import("../DragReorderDemo.tsx?raw"),
+  A11yDemo: () => import("../A11yDemo.tsx?raw"),
+  ReducedMotionDemo: () => import("../ReducedMotionDemo.tsx?raw"),
+  TransitionDemo: () => import("../TransitionDemo.tsx?raw"),
+  PinItemDemo: () => import("../PinItemDemo.tsx?raw"),
+  HeatmapAnalyticsDemo: () => import("../HeatmapAnalyticsDemo.tsx?raw"),
 };
 
 const DemoPage: React.FC<DemoPageProps> = ({

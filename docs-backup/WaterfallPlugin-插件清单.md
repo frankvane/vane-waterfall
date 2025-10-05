@@ -29,6 +29,12 @@
 - BookmarkPlugin（位置记忆/书签）：`Bookmark/`
 - StatePersistencePlugin（状态快照与恢复：返回保留滚动与布局）：`StatePersistence/`
 - URLSyncPlugin（URL 状态同步：分页/筛选/排序/搜索）：`URLSync/`
+- A11yPlugin（可访问性增强）：`A11y/`
+- ReducedMotionPlugin（减少动画，尊重系统偏好）：`ReducedMotion/`
+- TransitionPlugin（布局变化过渡）：`Transition/`
+- PinItemPlugin（项目置顶/固定在视口顶部或指定列）：`PinItem/`
+- WorkerLayoutPlugin（布局计算迁移至 WebWorker 的最小版本）：`WorkerLayout/`
+- HeatmapAnalyticsPlugin（点击/曝光热力分析，与可见性追踪联动）：`HeatmapAnalytics/`
 
 ## 待开发瀑布流插件（建议优先级可根据需求调整）
 - BatchRenderPlugin（批量渲染）：`BatchRender/`（待补充实现）
@@ -37,19 +43,14 @@
 - ViewportTrackingPlugin（可见性追踪）
 - ScrollDepthPlugin（滚动深度）
 - ErrorTrackingPlugin（错误追踪）
-- TransitionPlugin（布局变化过渡）
 - KeyboardNavigationPlugin（键盘导航）
 - TouchGesturePlugin（触摸手势）
 - SharePlugin（分享）
-- A11yPlugin（可访问性增强）
 - AnnouncerPlugin（屏幕阅读器播报）
-- ReducedMotionPlugin（减少动画，尊重系统偏好）
 
 ### 更多可开发插件（扩展）
-- PinItemPlugin（项目置顶/固定在视口顶部或指定列）：`PinItem/`
 - RTLLayoutPlugin（从右到左布局支持与镜像渲染）：`RTLLayout/`
 - OverscanAdaptivePlugin（按滚动速度/设备性能自适应 overscan）：`OverscanAdaptive/`
-- WorkerLayoutPlugin（将布局计算迁移至 WebWorker，主线程更流畅）：`WorkerLayout/`
 - IdleLayoutPlugin（使用 requestIdleCallback/调度在空闲时间布局）：`IdleLayout/`
 - PriorityRenderPlugin（优先渲染可见/高权重项，降低首屏时间）：`PriorityRender/`
 - DevToolsOverlayPlugin（开发调试叠层：网格线/列高度/可见范围）：`DevToolsOverlay/`
@@ -58,7 +59,6 @@
 - ExportLayoutPlugin（导出布局数据/快照接口，便于分析与回放）：`ExportLayout/`
 - PageVisibilityPlugin（页面不可见时暂停监听与降级策略）：`PageVisibility/`
 - ScrollSnapPlugin（滚动捕捉：对齐到行或分组边界）：`ScrollSnap/`
-- HeatmapAnalyticsPlugin（点击/曝光热力分析，与可见性追踪联动）：`HeatmapAnalytics/`
 
 ## 由 vane-lazy-image 提供或更适合在图片插件层实现的能力（瀑布流内不重复实现）
 - HoverEffectPlugin（悬停效果）
