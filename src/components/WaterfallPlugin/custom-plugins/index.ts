@@ -22,3 +22,8 @@ export { createVirtualWaterfallPlugin } from "./VirtualWaterfall";
 export { createThrottlePlugin } from "./Throttle";
 export { createDebounceLayoutPlugin } from "./DebounceLayout";
 export { createRecyclePlugin } from "./Recycle";
+export { createInfiniteScrollPlugin } from "./InfiniteScroll";
+export { createPaginationPlugin } from "./Pagination";
+export { createFilterPlugin } from "./Filter";
+export { createSortPlugin } from "./Sort";
+export { createSearchPlugin } from "./Search";

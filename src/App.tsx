@@ -21,6 +21,11 @@ import VirtualDynamicDemo from "./pages/WaterfallPlugin/VirtualDynamicDemo";
 import VirtualImageDemo from "./pages/WaterfallPlugin/VirtualImageDemo";
 import WaterfallHome from "./pages/WaterfallPlugin/Home";
 import WaterfallReadme from "./pages/WaterfallPlugin/ReadmeDemo";
+import InfiniteScrollDemo from "./pages/WaterfallPlugin/InfiniteScrollDemo";
+import PaginationDemo from "./pages/WaterfallPlugin/PaginationDemo";
+import FilterDemo from "./pages/WaterfallPlugin/FilterDemo";
+import SortDemo from "./pages/WaterfallPlugin/SortDemo";
+import SearchDemo from "./pages/WaterfallPlugin/SearchDemo";
 
 // Waterfall 组件导入
 
@@ -61,6 +66,11 @@ const App: React.FC = () => {
             <NavLink to="/waterfall/throttle-plugin">Throttle 插件演示</NavLink>
             <NavLink to="/waterfall/debounce-layout-plugin">DebounceLayout 插件演示</NavLink>
             <NavLink to="/waterfall/recycle-plugin">Recycle 插件演示</NavLink>
+            <NavLink to="/waterfall/infinite-scroll">InfiniteScroll 插件演示</NavLink>
+            <NavLink to="/waterfall/pagination-plugin">Pagination 插件演示</NavLink>
+            <NavLink to="/waterfall/filter-plugin">Filter 插件演示</NavLink>
+            <NavLink to="/waterfall/sort-plugin">Sort 插件演示</NavLink>
+            <NavLink to="/waterfall/search-plugin">Search 插件演示</NavLink>
           </div>
         </nav>
       </aside>
@@ -96,6 +106,11 @@ const App: React.FC = () => {
           <Route path="/waterfall/throttle-plugin" element={<ThrottlePluginDemo />} />
           <Route path="/waterfall/debounce-layout-plugin" element={<DebounceLayoutPluginDemo />} />
           <Route path="/waterfall/recycle-plugin" element={<RecyclePluginDemo />} />
+          <Route path="/waterfall/infinite-scroll" element={<InfiniteScrollDemo />} />
+          <Route path="/waterfall/pagination-plugin" element={<PaginationDemo />} />
+          <Route path="/waterfall/filter-plugin" element={<FilterDemo />} />
+          <Route path="/waterfall/sort-plugin" element={<SortDemo />} />
+          <Route path="/waterfall/search-plugin" element={<SearchDemo />} />
           <Route path="/waterfall/ref-methods" element={<RefMethodsDemo />} />
           <Route path="/waterfall/lifecycle" element={<LifecycleDemo />} />
           <Route

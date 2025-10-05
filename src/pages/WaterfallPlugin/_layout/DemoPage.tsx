@@ -28,6 +28,11 @@ const routeToFileMap: Record<string, string> = {
   "/waterfall/throttle-plugin": "ThrottlePluginDemo",
   "/waterfall/debounce-layout-plugin": "DebounceLayoutPluginDemo",
   "/waterfall/recycle-plugin": "RecyclePluginDemo",
+  "/waterfall/infinite-scroll": "InfiniteScrollDemo",
+  "/waterfall/pagination-plugin": "PaginationDemo",
+  "/waterfall/filter-plugin": "FilterDemo",
+  "/waterfall/sort-plugin": "SortDemo",
+  "/waterfall/search-plugin": "SearchDemo",
 };
 
 // 通过显式的动态导入映射，确保 Vite 能正确打包这些原文件的 raw 文本
@@ -48,6 +53,11 @@ const fileLoaderMap: Record<string, () => Promise<{ default: string }>> = {
   ThrottlePluginDemo: () => import("../ThrottlePluginDemo.tsx?raw"),
   DebounceLayoutPluginDemo: () => import("../DebounceLayoutPluginDemo.tsx?raw"),
   RecyclePluginDemo: () => import("../RecyclePluginDemo.tsx?raw"),
+  InfiniteScrollDemo: () => import("../InfiniteScrollDemo.tsx?raw"),
+  PaginationDemo: () => import("../PaginationDemo.tsx?raw"),
+  FilterDemo: () => import("../FilterDemo.tsx?raw"),
+  SortDemo: () => import("../SortDemo.tsx?raw"),
+  SearchDemo: () => import("../SearchDemo.tsx?raw"),
 };
 
 const DemoPage: React.FC<DemoPageProps> = ({
