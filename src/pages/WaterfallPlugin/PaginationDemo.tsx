@@ -1,5 +1,5 @@
-import React, { useMemo, useRef, useState } from "react";
-import { WaterfallCore, withPlugins, WaterfallCoreRef } from "@/components/WaterfallPlugin";
+import React, { useMemo, useState } from "react";
+import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
 
 import DemoPage from "./_layout/DemoPage";
 import { createPaginationPlugin } from "@/components/WaterfallPlugin/custom-plugins";
@@ -18,21 +18,20 @@ export default function PaginationDemo() {
   const [pageSize, setPageSize] = useState(24);
 
   const WaterfallWithPagination = useMemo(
-    () => withPlugins(WaterfallCore, [createPaginationPlugin({ pageSize })]),
+    () => withPlugins(WaterfallCore, [
+      createPaginationPlugin({ pageSize, scrollToTop: true, scrollBehavior: "smooth" }),
+    ]),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [pageSize]
   );
 
   const totalPages = Math.ceil(allItems.length / pageSize);
   const WaterfallCompAny = WaterfallWithPagination as any;
-  const coreRef = useRef<WaterfallCoreRef | null>(null);
 
   const goto = (next: number) => {
     if (next < 1) next = 1;
     if (next > totalPages) next = totalPages;
     setPageIndex(next);
-    // 翻页后滚动到顶部，增强分页体验
-    coreRef.current?.scrollToTop?.({ behavior: "smooth" });
   };
 
   return (
@@ -54,12 +53,13 @@ export default function PaginationDemo() {
       <div style={{ height: 600, border: "1px solid #ddd", borderRadius: 8, overflow: "hidden" }}>
         {/** 使用 JSX 方式渲染，避免将组件当作函数调用 */}
         <WaterfallCompAny
-          ref={coreRef}
           items={allItems}
           columns={4}
           gap={12}
           pageIndex={pageIndex}
           pageSize={pageSize}
+          scrollToTopOnPageChange={true}
+          scrollToTopBehavior={"smooth"}
           containerStyle={{
             height: "100%",
             background: "#f5f5f5",

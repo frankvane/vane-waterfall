@@ -3,6 +3,10 @@ import type { WaterfallPlugin } from "../../plugins/types";
 type SearchConfig<T = any> = {
   /** 要搜索的字段名列表（仅用于对象项） */
   fields?: (keyof T)[];
+  /** 条件变化后自动滚动到顶部 */
+  scrollToTop?: boolean;
+  /** 滚动行为（auto/smooth），仅在启用 scrollToTop 时生效 */
+  scrollBehavior?: "auto" | "smooth";
 };
 
 /**
@@ -30,6 +34,18 @@ export function createSearchPlugin<T = any>(config: SearchConfig<T> = {}): Water
           return false;
         });
         return { ...props, items: filtered } as any;
+      },
+      onPropsChange: (context, prevProps: any, nextProps: any) => {
+        const prevQuery = String(prevProps?.searchQuery ?? "");
+        const nextQuery = String(nextProps?.searchQuery ?? "");
+        const enabledFromProps = typeof nextProps?.scrollToTopOnSearchChange === "boolean"
+          ? nextProps.scrollToTopOnSearchChange
+          : undefined;
+        const shouldScroll = (enabledFromProps ?? Boolean(config.scrollToTop)) && prevQuery !== nextQuery;
+        if (shouldScroll) {
+          const behavior: "auto" | "smooth" = (nextProps?.scrollToTopBehavior as any) ?? config.scrollBehavior ?? "auto";
+          context.scrollToTop?.({ behavior });
+        }
       },
     },
   };

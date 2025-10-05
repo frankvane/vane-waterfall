@@ -3,6 +3,10 @@ import type { WaterfallPlugin } from "../../plugins/types";
 type FilterConfig<T = any> = {
   /** 初始筛选函数，可被 props.filterFn 覆盖 */
   predicate?: (item: T, index: number) => boolean;
+  /** 条件变化后自动滚动到顶部 */
+  scrollToTop?: boolean;
+  /** 滚动行为（auto/smooth），仅在启用 scrollToTop 时生效 */
+  scrollBehavior?: "auto" | "smooth";
 };
 
 /**
@@ -26,6 +30,18 @@ export function createFilterPlugin<T = any>(config: FilterConfig<T> = {}): Water
           }
         });
         return { ...props, items: filtered } as any;
+      },
+      onPropsChange: (context, prevProps: any, nextProps: any) => {
+        const prevFn = prevProps?.filterFn;
+        const nextFn = nextProps?.filterFn;
+        const enabledFromProps = typeof nextProps?.scrollToTopOnFilterChange === "boolean"
+          ? nextProps.scrollToTopOnFilterChange
+          : undefined;
+        const shouldScroll = (enabledFromProps ?? Boolean(config.scrollToTop)) && prevFn !== nextFn;
+        if (shouldScroll) {
+          const behavior: "auto" | "smooth" = (nextProps?.scrollToTopBehavior as any) ?? config.scrollBehavior ?? "auto";
+          context.scrollToTop?.({ behavior });
+        }
       },
     },
   };

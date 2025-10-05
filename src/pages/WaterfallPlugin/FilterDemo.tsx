@@ -21,7 +21,9 @@ export default function FilterDemo() {
   const [category, setCategory] = useState<Item["category"] | "all">("photo");
 
   const WaterfallWithFilter = useMemo(
-    () => withPlugins(WaterfallCore, [createFilterPlugin<Item>({})]),
+    () => withPlugins(WaterfallCore, [
+      createFilterPlugin<Item>({ scrollToTop: true, scrollBehavior: "smooth" }),
+    ]),
     []
   );
 
@@ -47,6 +49,8 @@ export default function FilterDemo() {
           columns={4}
           gap={12}
           filterFn={predicate}
+          scrollToTopOnFilterChange={true}
+          scrollToTopBehavior={"smooth"}
           containerStyle={{
             height: "100%",
             background: "#f5f5f5",

@@ -23,7 +23,9 @@ export default function SortDemo() {
   const [order, setOrder] = useState<Order>("desc");
 
   const WaterfallWithSort = useMemo(
-    () => withPlugins(WaterfallCore, [createSortPlugin<Item>({})]),
+    () => withPlugins(WaterfallCore, [
+      createSortPlugin<Item>({ scrollToTop: true, scrollBehavior: "smooth" }),
+    ]),
     []
   );
 
@@ -67,6 +69,8 @@ export default function SortDemo() {
           columns={4}
           gap={12}
           sortComparator={comparator}
+          scrollToTopOnSortChange={true}
+          scrollToTopBehavior={"smooth"}
           containerStyle={{
             height: "100%",
             background: "#f5f5f5",

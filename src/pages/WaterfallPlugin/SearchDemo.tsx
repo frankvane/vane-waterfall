@@ -17,7 +17,9 @@ export default function SearchDemo() {
   const [query, setQuery] = useState("");
 
   const WaterfallWithSearch = useMemo(
-    () => withPlugins(WaterfallCore, [createSearchPlugin<Item>({ fields: ["title", "tags"] })]),
+    () => withPlugins(WaterfallCore, [
+      createSearchPlugin<Item>({ fields: ["title", "tags"], scrollToTop: true, scrollBehavior: "smooth" }),
+    ]),
     []
   );
   const WaterfallCompAny = WaterfallWithSearch as any;
@@ -40,6 +42,8 @@ export default function SearchDemo() {
           columns={4}
           gap={12}
           searchQuery={query}
+          scrollToTopOnSearchChange={true}
+          scrollToTopBehavior={"smooth"}
           containerStyle={{
             height: "100%",
             background: "#f5f5f5",

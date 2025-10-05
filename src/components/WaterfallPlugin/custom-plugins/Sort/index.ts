@@ -3,6 +3,10 @@ import type { WaterfallPlugin } from "../../plugins/types";
 type SortConfig<T = any> = {
   /** 初始比较函数，可被 props.sortComparator 覆盖 */
   comparator?: (a: T, b: T) => number;
+  /** 条件变化后自动滚动到顶部 */
+  scrollToTop?: boolean;
+  /** 滚动行为（auto/smooth），仅在启用 scrollToTop 时生效 */
+  scrollBehavior?: "auto" | "smooth";
 };
 
 /**
@@ -26,6 +30,18 @@ export function createSortPlugin<T = any>(config: SortConfig<T> = {}): Waterfall
           }
         });
         return { ...props, items: sorted } as any;
+      },
+      onPropsChange: (context, prevProps: any, nextProps: any) => {
+        const prevCmp = prevProps?.sortComparator;
+        const nextCmp = nextProps?.sortComparator;
+        const enabledFromProps = typeof nextProps?.scrollToTopOnSortChange === "boolean"
+          ? nextProps.scrollToTopOnSortChange
+          : undefined;
+        const shouldScroll = (enabledFromProps ?? Boolean(config.scrollToTop)) && prevCmp !== nextCmp;
+        if (shouldScroll) {
+          const behavior: "auto" | "smooth" = (nextProps?.scrollToTopBehavior as any) ?? config.scrollBehavior ?? "auto";
+          context.scrollToTop?.({ behavior });
+        }
       },
     },
   };
