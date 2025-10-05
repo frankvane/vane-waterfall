@@ -1,6 +1,6 @@
 {
   "name": "vane-waterfall",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "vane-waterfall",
   "type": "module",
   "main": "dist/index.umd.js",
