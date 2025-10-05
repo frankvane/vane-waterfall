@@ -1,7 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import readmeContent from "@/components/WaterfallPlugin/README.md?raw";
+import readmeContent from "../../../README.md?raw";
 import remarkGfm from "remark-gfm";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 

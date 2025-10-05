@@ -46,6 +46,7 @@ const routeToFileMap: Record<string, string> = {
   "/waterfall/transition-plugin": "TransitionDemo",
   "/waterfall/pin-item-plugin": "PinItemDemo",
   "/waterfall/heatmap-analytics-plugin": "HeatmapAnalyticsDemo",
+  "/waterfall/lazy-image-integration": "LazyImageIntegrationDemo",
 };
 
 // 通过显式的动态导入映射，确保 Vite 能正确打包这些原文件的 raw 文本
@@ -84,6 +85,7 @@ const fileLoaderMap: Record<string, () => Promise<{ default: string }>> = {
   TransitionDemo: () => import("../TransitionDemo.tsx?raw"),
   PinItemDemo: () => import("../PinItemDemo.tsx?raw"),
   HeatmapAnalyticsDemo: () => import("../HeatmapAnalyticsDemo.tsx?raw"),
+  LazyImageIntegrationDemo: () => import("../LazyImageIntegrationDemo.tsx?raw"),
 };
 
 const DemoPage: React.FC<DemoPageProps> = ({

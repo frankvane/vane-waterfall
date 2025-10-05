@@ -15,7 +15,7 @@ export default function Home() {
           className="page-desc"
           style={{ fontSize: "1.2em", lineHeight: "1.8" }}
         >
-          一个功能强大、高度可扩展的 React 瀑布流布局组件库
+          一个功能强大、高度可扩展的 React 瀑布流布局插件式组件库，支持与 LazyLoadImage 集成
         </p>
       </div>
 
@@ -40,8 +40,8 @@ export default function Home() {
               🔌 插件化架构
             </h3>
             <p style={{ color: "#666", lineHeight: "1.6" }}>
-              基于插件系统，支持灵活组合和自定义扩展，与 LazyLoadImagePlugin
-              保持一致的架构设计
+              基于插件系统，支持灵活组合与自定义扩展；提供
+              calculateItemPosition 等钩子覆盖布局；与 LazyLoadImage 保持一致的架构设计
             </p>
           </div>
 
@@ -158,6 +158,7 @@ function MyWaterfall() {
       items={items}
       columns={3}
       gap={16}
+      padding={12}
       renderItem={(item) => (
         <div style={{ height: item.height }}>
           <h3>{item.title}</h3>
@@ -186,29 +187,38 @@ function MyWaterfall() {
               lineHeight: "1.5",
             }}
           >
-            {`import { WaterfallCore, withPlugins } from '@/components/WaterfallPlugin';
+            {`import {
+  WaterfallCore,
+  withPlugins,
+  createAutoColumnPlugin,
+  createResponsiveColumnsPlugin,
+  createAlignmentPlugin,
+  createTransitionPlugin,
+} from '@/components/WaterfallPlugin';
 
-// 创建自定义插件
-const myPlugin = {
-  name: 'my-plugin',
-  hooks: {
-    onReachBottom: async (context, distance) => {
-      // 加载更多数据
-      console.log('到达底部，加载更多');
+// 通过内置插件组合增强能力
+const WaterfallWithPlugins = withPlugins(WaterfallCore, [
+  createAutoColumnPlugin({ minColumnWidth: 220, minColumns: 1, maxColumns: 6 }),
+  createResponsiveColumnsPlugin({
+    breakpoints: {
+      xs: { width: 0, columns: 1 },
+      sm: { width: 640, columns: 2 },
+      md: { width: 768, columns: 3 },
+      lg: { width: 1024, columns: 4 },
+      xl: { width: 1280, columns: 5 },
     },
-  },
-};
-
-// 使用插件包装组件
-const WaterfallWithPlugins = withPlugins(WaterfallCore, [myPlugin]);
+  }),
+  createAlignmentPlugin({ mode: 'shortest' }),
+  createTransitionPlugin({ duration: 180, easing: 'ease-out' }),
+]);
 
 function MyEnhancedWaterfall() {
   return (
     <WaterfallWithPlugins
       items={items}
-      columns={3}
-      gap={16}
-      renderItem={(item) => <div>{item.title}</div>}
+      gap={12}
+      padding={12}
+      renderItem={(item) => <div style={{ height: item.height }}>{item.title}</div>}
     />
   );
 }`}
@@ -342,6 +352,20 @@ function MyEnhancedWaterfall() {
           >
             高级配置
           </NavLink>
+          <NavLink
+            to="/waterfall/lazy-image-integration"
+            style={{
+              padding: "12px 16px",
+              background: "#28a745",
+              color: "white",
+              borderRadius: "6px",
+              textDecoration: "none",
+              textAlign: "center",
+              transition: "background 0.2s",
+            }}
+          >
+            LazyImage 集成演示
+          </NavLink>
         </div>
       </div>
 
@@ -351,7 +375,7 @@ function MyEnhancedWaterfall() {
           查看完整的 API 文档和插件开发指南，了解更多高级用法。
         </p>
         <NavLink
-          to="/waterfall/readme"
+          to="/readme"
           style={{
             display: "inline-block",
             padding: "10px 20px",
