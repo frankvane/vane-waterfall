@@ -3,18 +3,21 @@ import "./App.css";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 
 import AdvancedConfigDemo from "./pages/WaterfallPlugin/AdvancedConfigDemo";
-import VirtualDynamicDemo from "./pages/WaterfallPlugin/VirtualDynamicDemo";
 import AlignmentDemo from "./pages/WaterfallPlugin/AlignmentDemo";
 import AutoColumnDemo from "./pages/WaterfallPlugin/AutoColumnDemo";
 import BasicDemo from "./pages/WaterfallPlugin/BasicDemo";
 import ColumnsDemo from "./pages/WaterfallPlugin/ColumnsDemo";
 import CustomGapDemo from "./pages/WaterfallPlugin/CustomGapDemo";
+import DebounceLayoutPluginDemo from "./pages/WaterfallPlugin/DebounceLayoutPluginDemo";
 import FixedHeightDemo from "./pages/WaterfallPlugin/FixedHeightDemo";
 import GapPluginDemo from "./pages/WaterfallPlugin/GapPluginDemo";
 import LifecycleDemo from "./pages/WaterfallPlugin/LifecycleDemo";
 import React from "react";
+import RecyclePluginDemo from "./pages/WaterfallPlugin/RecyclePluginDemo";
 import RefMethodsDemo from "./pages/WaterfallPlugin/RefMethodsDemo";
 import ResponsiveColumnsDemo from "./pages/WaterfallPlugin/ResponsiveColumnsDemo";
+import ThrottlePluginDemo from "./pages/WaterfallPlugin/ThrottlePluginDemo";
+import VirtualDynamicDemo from "./pages/WaterfallPlugin/VirtualDynamicDemo";
 import VirtualImageDemo from "./pages/WaterfallPlugin/VirtualImageDemo";
 import WaterfallHome from "./pages/WaterfallPlugin/Home";
 import WaterfallReadme from "./pages/WaterfallPlugin/ReadmeDemo";
@@ -55,6 +58,9 @@ const App: React.FC = () => {
             <NavLink to="/waterfall/gap-plugin">间距插件</NavLink>
             <NavLink to="/waterfall/virtual-images">虚拟瀑布流</NavLink>
             <NavLink to="/waterfall/virtual-dynamic">虚拟瀑布流（动态高度）</NavLink>
+            <NavLink to="/waterfall/throttle-plugin">Throttle 插件演示</NavLink>
+            <NavLink to="/waterfall/debounce-layout-plugin">DebounceLayout 插件演示</NavLink>
+            <NavLink to="/waterfall/recycle-plugin">Recycle 插件演示</NavLink>
           </div>
         </nav>
       </aside>
@@ -87,6 +93,9 @@ const App: React.FC = () => {
           />
           <Route path="/waterfall/virtual-images" element={<VirtualImageDemo />} />
           <Route path="/waterfall/virtual-dynamic" element={<VirtualDynamicDemo />} />
+          <Route path="/waterfall/throttle-plugin" element={<ThrottlePluginDemo />} />
+          <Route path="/waterfall/debounce-layout-plugin" element={<DebounceLayoutPluginDemo />} />
+          <Route path="/waterfall/recycle-plugin" element={<RecyclePluginDemo />} />
           <Route path="/waterfall/ref-methods" element={<RefMethodsDemo />} />
           <Route path="/waterfall/lifecycle" element={<LifecycleDemo />} />
           <Route

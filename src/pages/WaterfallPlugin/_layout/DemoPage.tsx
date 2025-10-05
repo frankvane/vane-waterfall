@@ -25,6 +25,9 @@ const routeToFileMap: Record<string, string> = {
   "/waterfall/responsive-columns": "ResponsiveColumnsDemo",
   "/waterfall/virtual-images": "VirtualImageDemo",
   "/waterfall/virtual-dynamic": "VirtualDynamicDemo",
+  "/waterfall/throttle-plugin": "ThrottlePluginDemo",
+  "/waterfall/debounce-layout-plugin": "DebounceLayoutPluginDemo",
+  "/waterfall/recycle-plugin": "RecyclePluginDemo",
 };
 
 // 通过显式的动态导入映射，确保 Vite 能正确打包这些原文件的 raw 文本
@@ -42,6 +45,9 @@ const fileLoaderMap: Record<string, () => Promise<{ default: string }>> = {
   ResponsiveColumnsDemo: () => import("../ResponsiveColumnsDemo.tsx?raw"),
   VirtualImageDemo: () => import("../VirtualImageDemo.tsx?raw"),
   VirtualDynamicDemo: () => import("../VirtualDynamicDemo.tsx?raw"),
+  ThrottlePluginDemo: () => import("../ThrottlePluginDemo.tsx?raw"),
+  DebounceLayoutPluginDemo: () => import("../DebounceLayoutPluginDemo.tsx?raw"),
+  RecyclePluginDemo: () => import("../RecyclePluginDemo.tsx?raw"),
 };
 
 const DemoPage: React.FC<DemoPageProps> = ({

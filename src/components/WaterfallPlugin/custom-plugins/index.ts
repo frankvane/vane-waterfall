@@ -19,3 +19,6 @@ export { createAlignmentPlugin } from "./Alignment";
 export { createGapPlugin } from "./Gap";
 export { createFixedHeightPlugin } from "./FixedHeight";
 export { createVirtualWaterfallPlugin } from "./VirtualWaterfall";
+export { createThrottlePlugin } from "./Throttle";
+export { createDebounceLayoutPlugin } from "./DebounceLayout";
+export { createRecyclePlugin } from "./Recycle";

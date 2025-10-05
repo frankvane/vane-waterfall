@@ -58,7 +58,8 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.3",
     "react-syntax-highlighter": "^15.6.6",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "vane-lazy-image": "^1.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

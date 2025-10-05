@@ -28,7 +28,14 @@ export function createVirtualWaterfallPlugin<T = any>(
     const items: T[] = context.items || [];
     const columns = Math.max(1, context.layout?.columns || 3);
     const gap = Number(context.layout?.gap || 0);
-    const columnWidth = Number(context.layout?.columnWidth || 0);
+    // 首屏时 layout 可能尚未就绪；使用容器宽度计算列宽，避免所有项堆叠在左上角
+    const container: HTMLDivElement | null = context.getContainer?.() || null;
+    const rawColumnWidth = Number(context.layout?.columnWidth || 0);
+    const columnWidth = rawColumnWidth > 0
+      ? rawColumnWidth
+      : container
+      ? (container.clientWidth - gap * (columns - 1)) / columns
+      : 0;
 
     const overscan = config.overscanPx ?? 300;
     const getH = config.getItemHeight;
@@ -111,6 +118,17 @@ export function createVirtualWaterfallPlugin<T = any>(
 
     const vt = Number(context.viewport?.scrollTop || 0);
     const vb = vt + Number(context.viewport?.clientHeight || 0);
+
+    // 如果列宽不可用，先渲染占位高度，避免首帧所有项堆叠在左上角
+    if (columnWidth <= 0) {
+      const estRows = Math.ceil(items.length / columns);
+      const estTotal = Math.max(0, estRows * (estimateH + gap));
+      return (
+        <div style={{ position: "relative", inset: 0 }}>
+          <div style={{ height: estTotal, pointerEvents: "none" }} />
+        </div>
+      );
+    }
 
     return (
       <div style={{ position: "relative", inset: 0 }}>
