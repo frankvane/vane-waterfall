@@ -15,7 +15,7 @@
 ### 🔌 插件化架构
 
 - 基于事件总线的插件系统，支持灵活组合
-- 60+ 内置插件，覆盖各种使用场景
+- 30+ 内置插件，覆盖各种使用场景
 - 易于扩展，支持自定义插件开发（如 `calculateItemPosition` 覆盖布局）
 
 ### 🧱 布局与渲染
@@ -111,7 +111,7 @@ import {
   withPlugins,
   createAlignmentPlugin,
   createTransitionPlugin,
-} from "@/components/WaterfallPlugin";
+} from "vane-lazy";
 
 const Waterfall = withPlugins(WaterfallCore, [
   createAlignmentPlugin({ mode: "shortest" }),
@@ -123,7 +123,7 @@ const Waterfall = withPlugins(WaterfallCore, [
 
 ```tsx
 // ❌ 不推荐：一次性导入所有插件（会失去 Tree-Shaking 优势）
-import * as Waterfall from "@/components/WaterfallPlugin";
+import * as Waterfall from "vane-lazy";
 ```
 
 ### 按需导入示例
@@ -131,10 +131,7 @@ import * as Waterfall from "@/components/WaterfallPlugin";
 #### 方式一：精确导入（最小体积）
 
 ```tsx
-import { WaterfallCore } from "@/components/WaterfallPlugin";
-import { withPlugins } from "@/components/WaterfallPlugin";
-import { createAlignmentPlugin } from "@/components/WaterfallPlugin/custom-plugins/Alignment";
-import { createTransitionPlugin } from "@/components/WaterfallPlugin/custom-plugins/Transition";
+import { WaterfallCore, withPlugins, createAlignmentPlugin, createTransitionPlugin } from "vane-lazy";
 ```
 
 #### 方式二：分类导入（推荐）
@@ -145,7 +142,7 @@ import {
   withPlugins,
   createAutoColumnPlugin,
   createResponsiveColumnsPlugin,
-} from "@/components/WaterfallPlugin";
+} from "vane-lazy";
 ```
 
 #### 方式三：分组导入
@@ -155,7 +152,7 @@ import {
   createAlignmentPlugin,
   createFixedHeightPlugin,
   createGapPlugin,
-} from "@/components/WaterfallPlugin";
+} from "vane-lazy";
 ```
 
 ### 不同场景的包大小对比（示意）
@@ -175,9 +172,7 @@ import {
 const Waterfall = withPlugins(WaterfallCore, [createTransitionPlugin()]);
 
 async function loadAdvancedPlugins() {
-  const { createVirtualWaterfallPlugin } = await import(
-    "@/components/WaterfallPlugin/custom-plugins/VirtualWaterfall"
-  );
+  const { createVirtualWaterfallPlugin } = await import("vane-lazy");
   return [createVirtualWaterfallPlugin()];
 }
 ```
@@ -191,7 +186,7 @@ export default {
     rollupOptions: {
       output: {
         manualChunks: {
-          waterfall: ["@/components/WaterfallPlugin"],
+          waterfall: ["vane-lazy"],
         },
       },
     },
@@ -209,8 +204,8 @@ module.exports = {
     splitChunks: {
       cacheGroups: {
         waterfall: {
-          test: /WaterfallPlugin/,
-          name: "waterfall",
+          test: /vane-lazy/,
+          name: "vane-lazy",
           chunks: "all",
         },
       },
@@ -234,7 +229,7 @@ module.exports = {
 ### 基础使用
 
 ```tsx
-import { WaterfallCore } from "@/components/WaterfallPlugin";
+import { WaterfallCore } from "vane-lazy";
 
 <WaterfallCore
   items={items}
@@ -254,7 +249,7 @@ import {
   createAutoColumnPlugin,
   createResponsiveColumnsPlugin,
   createTransitionPlugin,
-} from "@/components/WaterfallPlugin";
+} from "vane-lazy";
 
 const Waterfall = withPlugins(WaterfallCore, [
   createAutoColumnPlugin({ minColumnWidth: 220 }),
