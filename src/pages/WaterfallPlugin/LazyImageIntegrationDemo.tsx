@@ -25,14 +25,14 @@ import {
   createAlignmentPlugin,
   createAutoColumnPlugin,
   createBookmarkPlugin,
+  createInfiniteScrollPlugin,
   createResponsiveColumnsPlugin,
   createTransitionPlugin,
-  withPlugins,
-} from "@/components/WaterfallPlugin";
+  withPlugins
+} from "vane-waterfall";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import DemoPage from "./_layout/DemoPage";
-import { createInfiniteScrollPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface Item {
   id: number;

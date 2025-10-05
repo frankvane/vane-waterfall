@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
+import { WaterfallCore, createSortPlugin, withPlugins } from "vane-waterfall";
 
 import DemoPage from "./_layout/DemoPage";
-import { createSortPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 type Order = "asc" | "desc";
 type SortBy = "date" | "size" | "name";

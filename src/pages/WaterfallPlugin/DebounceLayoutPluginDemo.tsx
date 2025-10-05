@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from "react";
+import { WaterfallCore, createDebounceLayoutPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createDebounceLayoutPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface WaterfallItem {
   id: number;

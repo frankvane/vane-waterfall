@@ -1,8 +1,8 @@
 import React, { useMemo, useRef, useState } from "react";
+import { WaterfallCore, createScrollAnchorPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import type { WaterfallCoreRef } from "@/components/WaterfallPlugin";
-import { createScrollAnchorPlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import type { WaterfallCoreRef } from "vane-waterfall";
 
 interface Item { id: number | string; title: string; color: string; height: number; }
 

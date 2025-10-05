@@ -144,7 +144,7 @@ export default function Home() {
               lineHeight: "1.5",
             }}
           >
-            {`import { WaterfallCore } from '@/components/WaterfallPlugin';
+            {`import { WaterfallCore } from 'vane-waterfall';
 
 function MyWaterfall() {
   const items = [
@@ -194,7 +194,7 @@ function MyWaterfall() {
   createResponsiveColumnsPlugin,
   createAlignmentPlugin,
   createTransitionPlugin,
-} from '@/components/WaterfallPlugin';
+} from 'vane-waterfall';
 
 // 通过内置插件组合增强能力
 const WaterfallWithPlugins = withPlugins(WaterfallCore, [

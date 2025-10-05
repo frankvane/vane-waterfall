@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createPaginationPlugin, createStatePersistencePlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import { WaterfallCore, createPaginationPlugin, createStatePersistencePlugin, withPlugins } from "vane-waterfall";
 
 import DemoPage from "./_layout/DemoPage";
 

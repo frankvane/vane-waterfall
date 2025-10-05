@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createFixedHeightPlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import { WaterfallCore, createFixedHeightPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
 
 interface WaterfallItem {

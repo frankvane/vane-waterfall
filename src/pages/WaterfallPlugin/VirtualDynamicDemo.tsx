@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
+import { WaterfallCore, createVirtualWaterfallPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createVirtualWaterfallPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface DynamicItem {
   id: number;

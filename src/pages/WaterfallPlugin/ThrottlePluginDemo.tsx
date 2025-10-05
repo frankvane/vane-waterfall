@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
+import { WaterfallCore, createThrottlePlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createThrottlePlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface WaterfallItem {
   id: number;

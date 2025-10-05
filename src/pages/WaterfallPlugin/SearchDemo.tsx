@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
+import { WaterfallCore, createSearchPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createSearchPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface Item { id: number; title: string; tags: string[]; color: string; height: number; }
 

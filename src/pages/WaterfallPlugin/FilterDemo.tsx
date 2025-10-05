@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
+import { WaterfallCore, createFilterPlugin, withPlugins } from "vane-waterfall";
 
 import DemoPage from "./_layout/DemoPage";
-import { createFilterPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface Item { id: number; title: string; category: "photo" | "video" | "doc"; color: string; height: number; }
 

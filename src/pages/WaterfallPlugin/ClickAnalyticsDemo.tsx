@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
+import { WaterfallCore, createClickAnalyticsPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createClickAnalyticsPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface Item { id: number; title: string; color: string; height: number; }
 

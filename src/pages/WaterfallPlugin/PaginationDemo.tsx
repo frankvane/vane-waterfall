@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
+import { WaterfallCore, createPaginationPlugin, withPlugins } from "vane-waterfall";
 
 import DemoPage from "./_layout/DemoPage";
-import { createPaginationPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface Item { id: number; title: string; color: string; height: number; }
 

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createGapPlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import { WaterfallCore, createGapPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
 
 interface WaterfallItem {

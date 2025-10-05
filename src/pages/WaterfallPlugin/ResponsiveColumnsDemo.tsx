@@ -1,8 +1,7 @@
 import React, { useMemo } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
+import { WaterfallCore, createResponsiveColumnsPlugin, withPlugins } from "vane-waterfall";
 
 import DemoPage from "./_layout/DemoPage";
-import { createResponsiveColumnsPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface WaterfallItem {
   id: number;

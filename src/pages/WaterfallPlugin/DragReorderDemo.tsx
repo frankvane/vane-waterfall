@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
+import { WaterfallCore, createDragReorderPlugin, withPlugins } from "vane-waterfall";
 
 import DemoPage from "./_layout/DemoPage";
-import type { WaterfallCoreRef } from "@/components/WaterfallPlugin";
-import { createDragReorderPlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import type { WaterfallCoreRef } from "vane-waterfall";
 
 interface Item { id: number; title: string; color: string; height: number; }
 

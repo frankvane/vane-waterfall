@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
+import { WaterfallCore, createGroupingPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createGroupingPlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface Item { id: number; title: string; category: "A" | "B" | "C"; color: string; height: number; }
 

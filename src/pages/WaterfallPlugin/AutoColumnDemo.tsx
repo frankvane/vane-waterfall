@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createAutoColumnPlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import { WaterfallCore, createAutoColumnPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
 
 interface WaterfallItem {

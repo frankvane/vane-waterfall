@@ -1,8 +1,8 @@
 import React, { useMemo, useRef } from "react";
+import { WaterfallCore, createBookmarkPlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import type { WaterfallCoreRef } from "@/components/WaterfallPlugin";
-import { createBookmarkPlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import type { WaterfallCoreRef } from "vane-waterfall";
 
 interface Item { id: number; title: string; color: string; height: number; }
 

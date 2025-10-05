@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createGroupingPlugin, createStickyHeaderPlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import { WaterfallCore, createGroupingPlugin, createStickyHeaderPlugin, withPlugins } from "vane-waterfall";
 
 import DemoPage from "./_layout/DemoPage";
 

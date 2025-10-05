@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
+import { WaterfallCore, createRecyclePlugin, withPlugins } from "vane-waterfall";
+
 import DemoPage from "./_layout/DemoPage";
-import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createRecyclePlugin } from "@/components/WaterfallPlugin/custom-plugins";
 
 interface WaterfallItem {
   id: number;

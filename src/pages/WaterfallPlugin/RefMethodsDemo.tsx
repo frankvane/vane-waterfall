@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import { WaterfallCore, WaterfallCoreRef } from "@/components/WaterfallPlugin";
+import { WaterfallCore, WaterfallCoreRef } from "vane-waterfall";
 
 import DemoPage from "./_layout/DemoPage";
 
