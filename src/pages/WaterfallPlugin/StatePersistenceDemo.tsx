@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import DemoPage from "./_layout/DemoPage";
 import { WaterfallCore, withPlugins } from "@/components/WaterfallPlugin";
-import { createStatePersistencePlugin, createPaginationPlugin } from "@/components/WaterfallPlugin/custom-plugins";
+import { createPaginationPlugin, createStatePersistencePlugin } from "@/components/WaterfallPlugin/custom-plugins";
+
+import DemoPage from "./_layout/DemoPage";
 
 interface Item { id: number; title: string; color: string; height: number; }
 
@@ -17,7 +18,7 @@ const WaterfallCompAny = withPlugins<Item>(WaterfallCore, {
     createStatePersistencePlugin({ persistScroll: true, persistKeys: ["pageIndex", "pageSize"] }),
     createPaginationPlugin(),
   ],
-});
+}) as any;
 
 export default function StatePersistenceDemo() {
   const data = useMemo(() => items, []);
@@ -89,7 +90,7 @@ export default function StatePersistenceDemo() {
           pageIndex={pageIndex}
           pageSize={pageSize}
           containerStyle={{ height: "100%", background: "#f5f5f5", padding: "16px" }}
-          renderItem={(item) => (
+          renderItem={(item: Item) => (
             <div style={{ background: item.color, height: item.height, borderRadius: 6, padding: "8px 10px" }}>
               <div style={{ fontWeight: 600 }}>{item.title}</div>
             </div>

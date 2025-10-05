@@ -14,7 +14,7 @@ const items = Array.from({ length: 80 }, (_, i) => ({
 
 const WaterfallCompAny = withPlugins<Item>(WaterfallCore, {
   plugins: [createURLSyncPlugin({ mode: "hash", keys: ["pageIndex", "pageSize", "searchQuery"] })],
-});
+}) as any;
 
 export default function URLSyncDemo() {
   const data = useMemo(() => items, []);
@@ -86,7 +86,7 @@ export default function URLSyncDemo() {
           pageSize={pageSize}
           searchQuery={searchQuery}
           containerStyle={{ height: "100%", background: "#f5f5f5", padding: "16px" }}
-          renderItem={(item) => (
+          renderItem={(item: Item) => (
             <div style={{ background: item.color, height: item.height, borderRadius: 6, padding: "8px 10px" }}>
               <div style={{ fontWeight: 600 }}>{item.title}</div>
             </div>
