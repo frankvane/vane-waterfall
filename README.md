@@ -111,7 +111,7 @@ import {
   withPlugins,
   createAlignmentPlugin,
   createTransitionPlugin,
-} from "vane-lazy";
+} from "vane-waterfall";
 
 const Waterfall = withPlugins(WaterfallCore, [
   createAlignmentPlugin({ mode: "shortest" }),
@@ -123,7 +123,7 @@ const Waterfall = withPlugins(WaterfallCore, [
 
 ```tsx
 // ❌ 不推荐：一次性导入所有插件（会失去 Tree-Shaking 优势）
-import * as Waterfall from "vane-lazy";
+import * as Waterfall from "vane-waterfall";
 ```
 
 ### 按需导入示例
@@ -131,7 +131,7 @@ import * as Waterfall from "vane-lazy";
 #### 方式一：精确导入（最小体积）
 
 ```tsx
-import { WaterfallCore, withPlugins, createAlignmentPlugin, createTransitionPlugin } from "vane-lazy";
+import { WaterfallCore, withPlugins, createAlignmentPlugin, createTransitionPlugin } from "vane-waterfall";
 ```
 
 #### 方式二：分类导入（推荐）
@@ -142,7 +142,7 @@ import {
   withPlugins,
   createAutoColumnPlugin,
   createResponsiveColumnsPlugin,
-} from "vane-lazy";
+} from "vane-waterfall";
 ```
 
 #### 方式三：分组导入
@@ -152,7 +152,7 @@ import {
   createAlignmentPlugin,
   createFixedHeightPlugin,
   createGapPlugin,
-} from "vane-lazy";
+} from "vane-waterfall";
 ```
 
 ### 不同场景的包大小对比（示意）
@@ -172,7 +172,7 @@ import {
 const Waterfall = withPlugins(WaterfallCore, [createTransitionPlugin()]);
 
 async function loadAdvancedPlugins() {
-  const { createVirtualWaterfallPlugin } = await import("vane-lazy");
+  const { createVirtualWaterfallPlugin } = await import("vane-waterfall");
   return [createVirtualWaterfallPlugin()];
 }
 ```
@@ -186,7 +186,7 @@ export default {
     rollupOptions: {
       output: {
         manualChunks: {
-          waterfall: ["vane-lazy"],
+          waterfall: ["vane-waterfall"],
         },
       },
     },
@@ -204,8 +204,8 @@ module.exports = {
     splitChunks: {
       cacheGroups: {
         waterfall: {
-          test: /vane-lazy/,
-          name: "vane-lazy",
+          test: /vane-waterfall/,
+          name: "vane-waterfall",
           chunks: "all",
         },
       },
@@ -229,7 +229,7 @@ module.exports = {
 ### 基础使用
 
 ```tsx
-import { WaterfallCore } from "vane-lazy";
+import { WaterfallCore } from "vane-waterfall";
 
 <WaterfallCore
   items={items}
@@ -249,7 +249,7 @@ import {
   createAutoColumnPlugin,
   createResponsiveColumnsPlugin,
   createTransitionPlugin,
-} from "vane-lazy";
+} from "vane-waterfall";
 
 const Waterfall = withPlugins(WaterfallCore, [
   createAutoColumnPlugin({ minColumnWidth: 220 }),
