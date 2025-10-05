@@ -347,7 +347,7 @@ vane-waterfall/
 | `columns`       | `number`            | 列数（可被插件覆盖）              |
 | `gap`           | `number`            | 列间距                            |
 | `padding`       | `number`            | 容器内边距（参与布局计算）        |
-| `alignmentMode` | `"shortest" | ...` | 列分配策略                        |
+| `alignmentMode` | `"shortest"` | 列分配策略                        |
 | `onReachBottom` | `()=>void`          | 触底回调                          |
 
 ### 插件钩子（节选）
