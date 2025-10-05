@@ -817,6 +817,7 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
         className={containerClassName}
         onScroll={handleScroll}
       >
+        {children}
         <div
           style={{
             position: "relative",
@@ -827,7 +828,6 @@ const WaterfallCore = forwardRef<WaterfallCoreRef, WaterfallCoreProps>(
         >
           {renderItems()}
         </div>
-        {children}
       </div>
     );
   }

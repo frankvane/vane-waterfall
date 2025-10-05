@@ -27,3 +27,13 @@ export { createPaginationPlugin } from "./Pagination";
 export { createFilterPlugin } from "./Filter";
 export { createSortPlugin } from "./Sort";
 export { createSearchPlugin } from "./Search";
+
+// ===== 新增实验插件导出 =====
+export { createClickAnalyticsPlugin } from "./ClickAnalytics/index.tsx";
+export { createBookmarkPlugin } from "./Bookmark/index.tsx";
+export { createURLSyncPlugin } from "./URLSync";
+export { createStatePersistencePlugin } from "./StatePersistence";
+export { createGroupingPlugin } from "./Grouping/index.tsx";
+export { createStickyHeaderPlugin } from "./StickyHeader/index.tsx";
+export { createScrollAnchorPlugin } from "./ScrollAnchor/index.tsx";
+export { createDragReorderPlugin } from "./DragReorder/index.tsx";

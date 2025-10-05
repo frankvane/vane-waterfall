@@ -33,6 +33,14 @@ const routeToFileMap: Record<string, string> = {
   "/waterfall/filter-plugin": "FilterDemo",
   "/waterfall/sort-plugin": "SortDemo",
   "/waterfall/search-plugin": "SearchDemo",
+  "/waterfall/click-analytics-plugin": "ClickAnalyticsDemo",
+  "/waterfall/bookmark-plugin": "BookmarkDemo",
+  "/waterfall/url-sync-plugin": "URLSyncDemo",
+  "/waterfall/state-persistence-plugin": "StatePersistenceDemo",
+  "/waterfall/grouping-plugin": "GroupingDemo",
+  "/waterfall/sticky-header-plugin": "StickyHeaderDemo",
+  "/waterfall/scroll-anchor-plugin": "ScrollAnchorDemo",
+  "/waterfall/drag-reorder-plugin": "DragReorderDemo",
 };
 
 // 通过显式的动态导入映射，确保 Vite 能正确打包这些原文件的 raw 文本
@@ -58,6 +66,14 @@ const fileLoaderMap: Record<string, () => Promise<{ default: string }>> = {
   FilterDemo: () => import("../FilterDemo.tsx?raw"),
   SortDemo: () => import("../SortDemo.tsx?raw"),
   SearchDemo: () => import("../SearchDemo.tsx?raw"),
+  ClickAnalyticsDemo: () => import("../ClickAnalyticsDemo.tsx?raw"),
+  BookmarkDemo: () => import("../BookmarkDemo.tsx?raw"),
+  URLSyncDemo: () => import("../URLSyncDemo.tsx?raw"),
+  StatePersistenceDemo: () => import("../StatePersistenceDemo.tsx?raw"),
+  GroupingDemo: () => import("../GroupingDemo.tsx?raw"),
+  StickyHeaderDemo: () => import("../StickyHeaderDemo.tsx?raw"),
+  ScrollAnchorDemo: () => import("../ScrollAnchorDemo.tsx?raw"),
+  DragReorderDemo: () => import("../DragReorderDemo.tsx?raw"),
 };
 
 const DemoPage: React.FC<DemoPageProps> = ({

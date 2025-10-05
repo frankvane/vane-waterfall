@@ -6,26 +6,34 @@ import AdvancedConfigDemo from "./pages/WaterfallPlugin/AdvancedConfigDemo";
 import AlignmentDemo from "./pages/WaterfallPlugin/AlignmentDemo";
 import AutoColumnDemo from "./pages/WaterfallPlugin/AutoColumnDemo";
 import BasicDemo from "./pages/WaterfallPlugin/BasicDemo";
+import BookmarkDemo from "./pages/WaterfallPlugin/BookmarkDemo";
+import ClickAnalyticsDemo from "./pages/WaterfallPlugin/ClickAnalyticsDemo";
 import ColumnsDemo from "./pages/WaterfallPlugin/ColumnsDemo";
 import CustomGapDemo from "./pages/WaterfallPlugin/CustomGapDemo";
 import DebounceLayoutPluginDemo from "./pages/WaterfallPlugin/DebounceLayoutPluginDemo";
+import DragReorderDemo from "./pages/WaterfallPlugin/DragReorderDemo";
+import FilterDemo from "./pages/WaterfallPlugin/FilterDemo";
 import FixedHeightDemo from "./pages/WaterfallPlugin/FixedHeightDemo";
 import GapPluginDemo from "./pages/WaterfallPlugin/GapPluginDemo";
+import GroupingDemo from "./pages/WaterfallPlugin/GroupingDemo";
+import InfiniteScrollDemo from "./pages/WaterfallPlugin/InfiniteScrollDemo";
 import LifecycleDemo from "./pages/WaterfallPlugin/LifecycleDemo";
+import PaginationDemo from "./pages/WaterfallPlugin/PaginationDemo";
 import React from "react";
 import RecyclePluginDemo from "./pages/WaterfallPlugin/RecyclePluginDemo";
 import RefMethodsDemo from "./pages/WaterfallPlugin/RefMethodsDemo";
 import ResponsiveColumnsDemo from "./pages/WaterfallPlugin/ResponsiveColumnsDemo";
+import ScrollAnchorDemo from "./pages/WaterfallPlugin/ScrollAnchorDemo";
+import SearchDemo from "./pages/WaterfallPlugin/SearchDemo";
+import SortDemo from "./pages/WaterfallPlugin/SortDemo";
+import StatePersistenceDemo from "./pages/WaterfallPlugin/StatePersistenceDemo";
+import StickyHeaderDemo from "./pages/WaterfallPlugin/StickyHeaderDemo";
 import ThrottlePluginDemo from "./pages/WaterfallPlugin/ThrottlePluginDemo";
+import URLSyncDemo from "./pages/WaterfallPlugin/URLSyncDemo";
 import VirtualDynamicDemo from "./pages/WaterfallPlugin/VirtualDynamicDemo";
 import VirtualImageDemo from "./pages/WaterfallPlugin/VirtualImageDemo";
 import WaterfallHome from "./pages/WaterfallPlugin/Home";
 import WaterfallReadme from "./pages/WaterfallPlugin/ReadmeDemo";
-import InfiniteScrollDemo from "./pages/WaterfallPlugin/InfiniteScrollDemo";
-import PaginationDemo from "./pages/WaterfallPlugin/PaginationDemo";
-import FilterDemo from "./pages/WaterfallPlugin/FilterDemo";
-import SortDemo from "./pages/WaterfallPlugin/SortDemo";
-import SearchDemo from "./pages/WaterfallPlugin/SearchDemo";
 
 // Waterfall 组件导入
 
@@ -71,6 +79,14 @@ const App: React.FC = () => {
             <NavLink to="/waterfall/filter-plugin">Filter 插件演示</NavLink>
             <NavLink to="/waterfall/sort-plugin">Sort 插件演示</NavLink>
             <NavLink to="/waterfall/search-plugin">Search 插件演示</NavLink>
+            <NavLink to="/waterfall/click-analytics-plugin">ClickAnalytics 插件演示</NavLink>
+            <NavLink to="/waterfall/bookmark-plugin">Bookmark 插件演示</NavLink>
+            <NavLink to="/waterfall/url-sync-plugin">URLSync 插件演示</NavLink>
+            <NavLink to="/waterfall/state-persistence-plugin">StatePersistence 插件演示</NavLink>
+            <NavLink to="/waterfall/grouping-plugin">Grouping 插件演示</NavLink>
+            <NavLink to="/waterfall/sticky-header-plugin">StickyHeader 插件演示</NavLink>
+            <NavLink to="/waterfall/scroll-anchor-plugin">ScrollAnchor 插件演示</NavLink>
+            <NavLink to="/waterfall/drag-reorder-plugin">DragReorder 插件演示</NavLink>
           </div>
         </nav>
       </aside>
@@ -111,6 +127,14 @@ const App: React.FC = () => {
           <Route path="/waterfall/filter-plugin" element={<FilterDemo />} />
           <Route path="/waterfall/sort-plugin" element={<SortDemo />} />
           <Route path="/waterfall/search-plugin" element={<SearchDemo />} />
+          <Route path="/waterfall/click-analytics-plugin" element={<ClickAnalyticsDemo />} />
+          <Route path="/waterfall/bookmark-plugin" element={<BookmarkDemo />} />
+          <Route path="/waterfall/url-sync-plugin" element={<URLSyncDemo />} />
+          <Route path="/waterfall/state-persistence-plugin" element={<StatePersistenceDemo />} />
+          <Route path="/waterfall/grouping-plugin" element={<GroupingDemo />} />
+          <Route path="/waterfall/sticky-header-plugin" element={<StickyHeaderDemo />} />
+          <Route path="/waterfall/scroll-anchor-plugin" element={<ScrollAnchorDemo />} />
+          <Route path="/waterfall/drag-reorder-plugin" element={<DragReorderDemo />} />
           <Route path="/waterfall/ref-methods" element={<RefMethodsDemo />} />
           <Route path="/waterfall/lifecycle" element={<LifecycleDemo />} />
           <Route

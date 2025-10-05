@@ -216,21 +216,23 @@ export function withPlugins<T = any>(
       ]
     );
 
-    // 注册插件
-    useEffect(() => {
+    // 注册插件（渲染期执行，确保核心组件的 onMount 之前插件已可用）
+    const prevPluginNamesRef = useRef<string[]>([]);
+    const currentNames = plugins.map((p) => p.name);
+    if (
+      prevPluginNamesRef.current.length === 0 ||
+      prevPluginNamesRef.current.join("|") !== currentNames.join("|")
+    ) {
       if (enableDebug) {
         console.debug(
-          "[withPlugins] registering plugins:",
-          plugins.map((p) => p.name)
+          "[withPlugins] register plugins:",
+          currentNames
         );
       }
-
+      pluginManager.clear();
       pluginManager.registerAll(plugins);
-
-      return () => {
-        pluginManager.clear();
-      };
-    }, [plugins, pluginManager, enableDebug]);
+      prevPluginNamesRef.current = currentNames;
+    }
 
     // 说明：onMount/onUnmount 生命周期统一由核心组件回调触发，避免重复执行
 
@@ -431,6 +433,24 @@ export function withPlugins<T = any>(
         pluginManager
           .executeHook("onItemClick", pluginContext, index, item, event)
           .catch(() => {});
+      },
+
+      // 渲染项：允许插件包装项容器（renderItemWrapper）
+      renderItem: (item: any, index: number) => {
+        const original = transformedProps.renderItem || ((it: any) => null);
+        let children = original(item, index);
+        for (const plugin of plugins) {
+          const wrap = plugin.hooks.renderItemWrapper?.(
+            pluginContext,
+            index,
+            item,
+            children
+          );
+          if (wrap !== undefined && wrap !== null) {
+            children = wrap;
+          }
+        }
+        return children;
       },
 
       // 子元素

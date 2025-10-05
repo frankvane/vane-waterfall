@@ -19,18 +19,19 @@ export function createPaginationPlugin<T = any>(config: PaginationConfig = {}): 
     enabled: true,
     hooks: {
       transformProps: (props: any) => {
-        const pageIndex: number = Math.max(0, Number(props.pageIndex ?? 0));
+        // 统一采用 1 基页码：展示页码从 1 开始
+        const pageIndex1: number = Math.max(1, Number(props.pageIndex ?? 1));
         const pageSize: number = Math.max(1, Number(props.pageSize ?? config.pageSize ?? 20));
         const items: T[] = Array.isArray(props.items) ? props.items : [];
-        const start = pageIndex * pageSize;
+        const start = (pageIndex1 - 1) * pageSize;
         const end = start + pageSize;
         const sliced = items.slice(start, end);
         return { ...props, items: sliced } as any;
       },
       onPropsChange: (context, prevProps: any, nextProps: any) => {
         // 仅在页码变化时触发“滚动到顶部”逻辑
-        const prevIndex = Math.max(0, Number(prevProps?.pageIndex ?? 0));
-        const nextIndex = Math.max(0, Number(nextProps?.pageIndex ?? 0));
+        const prevIndex = Math.max(1, Number(prevProps?.pageIndex ?? 1));
+        const nextIndex = Math.max(1, Number(nextProps?.pageIndex ?? 1));
         const enabledFromProps = typeof nextProps?.scrollToTopOnPageChange === "boolean"
           ? nextProps.scrollToTopOnPageChange
           : undefined;
